@@ -10,36 +10,26 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    var detailItem: AnyObject? { didSet { self.configureView() } }
 
-
-    var detailItem: AnyObject? {
-        didSet {
-            // Update the view.
-            self.configureView()
-        }
-    }
+    @IBOutlet var detailDescriptionLabel: UILabel?
 
     func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.description
-            }
+        if let detailItem = self.detailItem {
+            self.detailDescriptionLabel?.text = detailItem.description ?? "No Description"
+        } else {
+            self.detailDescriptionLabel?.text = "No Content"
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        if let splitViewController = self.splitViewController {
+            self.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+            self.navigationItem.leftItemsSupplementBackButton = true
+        }
     }
-
 
 }
-
