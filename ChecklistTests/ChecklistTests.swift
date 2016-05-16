@@ -21,16 +21,33 @@ class ChecklistTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testChecklistItemInitWithoutChecked() {
+        let item = ChecklistItem(title: "test")
+
+        XCTAssertEqual(item.title, "test")
+        XCTAssertEqual(item.checked, false)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
+
+    func testChecklistItemInitWithChecked() {
+        let item = ChecklistItem(title: "test", checked: true)
+
+        XCTAssertEqual(item.title, "test")
+        XCTAssertEqual(item.checked, true)
     }
-    
+
+    func testChecklistInit() {
+        let checklist = Checklist(title: "test", items: [])
+
+        XCTAssertEqual(checklist.title, "test")
+        XCTAssertEqual(checklist.items, [])
+    }
+
+    func testChecklistChecked() {
+        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test")])
+
+        XCTAssertEqual(checklist.items.first?.checked, false)
+        checklist.items.first?.checked = true
+        XCTAssertEqual(checklist.items.first?.checked, true)
+    }
+
 }

@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B75C5951CE960140047AACF /* Checklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5941CE960140047AACF /* Checklist.swift */; };
+		7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5961CE960EE0047AACF /* ChecklistItem.swift */; };
 		7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */; };
 		7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */; };
 		7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A911CE7B43500D05C9C /* DetailViewController.swift */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B75C5941CE960140047AACF /* Checklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checklist.swift; sourceTree = "<group>"; };
+		7B75C5961CE960EE0047AACF /* ChecklistItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
 		7BB76A8A1CE7B43500D05C9C /* Checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B75C5931CE95FDC0047AACF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7B75C5941CE960140047AACF /* Checklist.swift */,
+				7B75C5961CE960EE0047AACF /* ChecklistItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		7BB76A811CE7B43500D05C9C = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +112,7 @@
 		7BB76A8C1CE7B43500D05C9C /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				7B75C5931CE95FDC0047AACF /* Models */,
 				7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */,
 				7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */,
 				7BB76A911CE7B43500D05C9C /* DetailViewController.swift */,
@@ -208,7 +222,7 @@
 				};
 			};
 			buildConfigurationList = 7BB76A851CE7B43500D05C9C /* Build configuration list for PBXProject "Checklist" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -259,6 +273,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B75C5951CE960140047AACF /* Checklist.swift in Sources */,
+				7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */,
 				7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */,
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
 				7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */,
@@ -488,6 +504,7 @@
 				7BB76AB61CE7B43500D05C9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7BB76AB71CE7B43500D05C9C /* Build configuration list for PBXNativeTarget "ChecklistTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +513,7 @@
 				7BB76AB91CE7B43500D05C9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7BB76ABA1CE7B43500D05C9C /* Build configuration list for PBXNativeTarget "ChecklistUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +522,7 @@
 				7BB76ABC1CE7B43500D05C9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
