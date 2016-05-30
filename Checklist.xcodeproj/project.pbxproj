@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		7B75C5951CE960140047AACF /* Checklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5941CE960140047AACF /* Checklist.swift */; };
 		7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5961CE960EE0047AACF /* ChecklistItem.swift */; };
+		7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
+		7BAA6A5E1CFBD20800DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
+		7BAA6A5F1CFBD20F00DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
 		7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */; };
 		7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */; };
 		7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A911CE7B43500D05C9C /* DetailViewController.swift */; };
@@ -39,6 +42,7 @@
 /* Begin PBXFileReference section */
 		7B75C5941CE960140047AACF /* Checklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checklist.swift; sourceTree = "<group>"; };
 		7B75C5961CE960EE0047AACF /* ChecklistItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
+		7BAA6A571CFB7D9500DF8598 /* Decodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Decodable.framework; path = Carthage/Build/iOS/Decodable.framework; sourceTree = "<group>"; };
 		7BB76A8A1CE7B43500D05C9C /* Checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BAA6A5E1CFBD20800DF8598 /* Decodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BAA6A5F1CFBD20F00DF8598 /* Decodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,12 +96,21 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		7BAA6A591CFB7D9E00DF8598 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7BAA6A571CFB7D9500DF8598 /* Decodable.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7BB76A811CE7B43500D05C9C = {
 			isa = PBXGroup;
 			children = (
 				7BB76A8C1CE7B43500D05C9C /* Checklist */,
 				7BB76AA31CE7B43500D05C9C /* ChecklistTests */,
 				7BB76AAE1CE7B43500D05C9C /* ChecklistUITests */,
+				7BAA6A591CFB7D9E00DF8598 /* Frameworks */,
 				7BB76A8B1CE7B43500D05C9C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -152,6 +168,7 @@
 				7BB76A861CE7B43500D05C9C /* Sources */,
 				7BB76A871CE7B43500D05C9C /* Frameworks */,
 				7BB76A881CE7B43500D05C9C /* Resources */,
+				7BAA6A5A1CFBCE4300DF8598 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -187,6 +204,7 @@
 				7BB76AA71CE7B43500D05C9C /* Sources */,
 				7BB76AA81CE7B43500D05C9C /* Frameworks */,
 				7BB76AA91CE7B43500D05C9C /* Resources */,
+				7BAA6A601CFBD3FB00DF8598 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -267,6 +285,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7BAA6A5A1CFBCE4300DF8598 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Decodable.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		7BAA6A601CFBD3FB00DF8598 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Decodable.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7BB76A861CE7B43500D05C9C /* Sources */ = {
@@ -421,6 +470,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Checklist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.Checklist;
@@ -432,6 +485,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Checklist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.Checklist;
@@ -443,6 +500,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ChecklistTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.ChecklistTests;
@@ -455,6 +516,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ChecklistTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.ChecklistTests;
@@ -466,6 +531,10 @@
 		7BB76ABB1CE7B43500D05C9C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ChecklistUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.ChecklistUITests;
@@ -477,6 +546,10 @@
 		7BB76ABC1CE7B43500D05C9C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ChecklistUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jltsource.ChecklistUITests;

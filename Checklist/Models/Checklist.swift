@@ -7,13 +7,23 @@
 //
 
 import Foundation
+import Decodable
 
 class Checklist {
     var title: String
     var items: [ChecklistItem]
 
-    init(title: String, items: [ChecklistItem]) {
+    required init(title: String, items: [ChecklistItem]) {
         self.title = title
         self.items = items
+    }
+}
+
+extension Checklist: Decodable {
+    static func decode(json: AnyObject) throws -> Self {
+        return try self.init(
+            title: json => "title",
+            items: json => "items"
+        )
     }
 }
