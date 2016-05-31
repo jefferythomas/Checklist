@@ -20,13 +20,6 @@ class ChecklistTests: XCTestCase {
         super.tearDown()
     }
 
-    func testChecklistItemInitWithoutChecked() {
-        let item = ChecklistItem(title: "test")
-
-        XCTAssertEqual(item.title, "test")
-        XCTAssertEqual(item.checked, false)
-    }
-
     func testChecklistItemInitWithChecked() {
         let item = ChecklistItem(title: "test", checked: true)
 
@@ -78,11 +71,12 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistChecked() {
-        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: false)])
+        var checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: false)])
 
-        XCTAssertEqual(checklist.items.first?.checked, false)
-        checklist.items.first?.checked = true
-        XCTAssertEqual(checklist.items.first?.checked, true)
+        XCTAssertEqual(checklist.items.count, 1)
+        XCTAssertEqual(checklist.items[0].checked, false)
+        checklist.items[0].checked = true
+        XCTAssertEqual(checklist.items[0].checked, true)
     }
 
     func testChecklistDecode() {

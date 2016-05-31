@@ -9,18 +9,9 @@
 import Foundation
 import Decodable
 
-class ChecklistItem {
+struct ChecklistItem {
     var title: String
     var checked: Bool
-
-    required init(title: String, checked: Bool) {
-        self.title = title
-        self.checked = checked
-    }
-
-    convenience init(title: String) {
-        self.init(title: title, checked: false)
-    }
 }
 
 extension ChecklistItem: Equatable { }
@@ -29,7 +20,7 @@ func == (lhs: ChecklistItem, rhs: ChecklistItem) -> Bool {
 }
 
 extension ChecklistItem: Decodable {
-    static func decode(json: AnyObject) throws -> Self {
+    static func decode(json: AnyObject) throws -> ChecklistItem {
         return try self.init(
             title: json => "title",
             checked: json => "checked"

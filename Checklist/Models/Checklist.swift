@@ -9,18 +9,13 @@
 import Foundation
 import Decodable
 
-class Checklist {
+struct Checklist {
     var title: String
     var items: [ChecklistItem]
-
-    required init(title: String, items: [ChecklistItem]) {
-        self.title = title
-        self.items = items
-    }
 }
 
 extension Checklist: Decodable {
-    static func decode(json: AnyObject) throws -> Self {
+    static func decode(json: AnyObject) throws -> Checklist {
         return try self.init(
             title: json => "title",
             items: json => "items"
