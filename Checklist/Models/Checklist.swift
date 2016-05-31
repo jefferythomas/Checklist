@@ -26,4 +26,8 @@ extension Checklist: Decodable {
             items: json => "items"
         )
     }
+
+    func encode() -> AnyObject {
+        return ["title": title, "items": items.map { item in item.encode() }]
+    }
 }

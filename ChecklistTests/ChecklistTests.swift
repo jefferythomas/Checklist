@@ -10,17 +10,16 @@ import XCTest
 @testable import Checklist
 
 class ChecklistTests: XCTestCase {
-    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     func testChecklistItemInitWithoutChecked() {
         let item = ChecklistItem(title: "test")
 
@@ -59,6 +58,18 @@ class ChecklistTests: XCTestCase {
         }
     }
 
+    func testChecklistItemEncode() {
+        let item = ChecklistItem(title: "test", checked: false)
+
+        let json = item.encode()
+
+        let title = (json as? [String: AnyObject])?["title"] as? String
+        let checked = (json as? [String: AnyObject])?["checked"] as? Bool
+
+        XCTAssertEqual(title, "test")
+        XCTAssertEqual(checked, false)
+    }
+
     func testChecklistInit() {
         let checklist = Checklist(title: "test", items: [])
 
@@ -67,7 +78,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistChecked() {
-        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test")])
+        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: false)])
 
         XCTAssertEqual(checklist.items.first?.checked, false)
         checklist.items.first?.checked = true
@@ -87,4 +98,18 @@ class ChecklistTests: XCTestCase {
         }
     }
 
+    func testChecklistEncode() {
+        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: true)])
+
+        let json = checklist.encode()
+
+        let title = (json as? [String: AnyObject])?["title"] as? String
+        let items = (json as? [String: AnyObject])?["items"] as? [[String: AnyObject]]
+        let firstItemTitle = items?.first?["title"] as? String
+        let firstItemChecked = items?.first?["checked"] as? Bool
+
+        XCTAssertEqual(title, "test")
+        XCTAssertEqual(firstItemTitle, "test")
+        XCTAssertEqual(firstItemChecked, true)
+    }
 }

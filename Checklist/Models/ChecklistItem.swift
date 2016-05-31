@@ -10,7 +10,6 @@ import Foundation
 import Decodable
 
 class ChecklistItem {
-
     var title: String
     var checked: Bool
 
@@ -22,7 +21,6 @@ class ChecklistItem {
     convenience init(title: String) {
         self.init(title: title, checked: false)
     }
-
 }
 
 extension ChecklistItem: Equatable { }
@@ -36,5 +34,9 @@ extension ChecklistItem: Decodable {
             title: json => "title",
             checked: json => "checked"
         )
+    }
+
+    func encode() -> AnyObject {
+        return ["title": title, "checked": checked]
     }
 }
