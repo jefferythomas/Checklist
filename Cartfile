@@ -1,1 +1,2 @@
 github "Anviking/Decodable"
+github "mxcl/PromiseKit" ~> 3.0

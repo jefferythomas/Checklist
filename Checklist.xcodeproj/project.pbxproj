@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B72C5BB1CFE78FD006E9923 /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B72C5B91CFE78FD006E9923 /* OMGHTTPURLRQ.framework */; };
+		7B72C5BC1CFE78FD006E9923 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */; };
+		7B72C5BF1D01911D006E9923 /* ChecklistDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */; };
 		7B75C5951CE960140047AACF /* Checklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5941CE960140047AACF /* Checklist.swift */; };
 		7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5961CE960EE0047AACF /* ChecklistItem.swift */; };
+		7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */; };
 		7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
 		7BAA6A5E1CFBD20800DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
 		7BAA6A5F1CFBD20F00DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
@@ -40,8 +44,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B72C5B91CFE78FD006E9923 /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
+		7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
+		7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDataSet.swift; sourceTree = "<group>"; };
 		7B75C5941CE960140047AACF /* Checklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checklist.swift; sourceTree = "<group>"; };
 		7B75C5961CE960EE0047AACF /* ChecklistItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
+		7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDataSource.swift; sourceTree = "<group>"; };
 		7BAA6A571CFB7D9500DF8598 /* Decodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Decodable.framework; path = Carthage/Build/iOS/Decodable.framework; sourceTree = "<group>"; };
 		7BB76A8A1CE7B43500D05C9C /* Checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +73,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */,
+				7B72C5BB1CFE78FD006E9923 /* OMGHTTPURLRQ.framework in Frameworks */,
+				7B72C5BC1CFE78FD006E9923 /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +102,8 @@
 			children = (
 				7B75C5941CE960140047AACF /* Checklist.swift */,
 				7B75C5961CE960EE0047AACF /* ChecklistItem.swift */,
+				7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */,
+				7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -99,6 +111,8 @@
 		7BAA6A591CFB7D9E00DF8598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B72C5B91CFE78FD006E9923 /* OMGHTTPURLRQ.framework */,
+				7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */,
 				7BAA6A571CFB7D9500DF8598 /* Decodable.framework */,
 			);
 			name = Frameworks;
@@ -294,6 +308,8 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Decodable.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/OMGHTTPURLRQ.framework",
 			);
 			outputPaths = (
 			);
@@ -324,8 +340,10 @@
 			files = (
 				7B75C5951CE960140047AACF /* Checklist.swift in Sources */,
 				7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */,
+				7B72C5BF1D01911D006E9923 /* ChecklistDataSet.swift in Sources */,
 				7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */,
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
+				7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */,
 				7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
