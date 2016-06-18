@@ -26,8 +26,10 @@ extension ChecklistDataSet: Decodable {
     static func decode(json: AnyObject) throws -> Self {
         return try self.init(identifier: json => "identifier", checklists: json => "checklists")
     }
+}
 
-    func encode() -> AnyObject {
-        return ["identifier": identifier, "checklists": checklists.map { checklist in checklist.encode() }]
+extension ChecklistDataSet: JSONEncodable {
+    func JSONEncode() throws -> AnyObject {
+        return ["identifier": identifier, "checklists": try checklists.JSONEncode()]
     }
 }

@@ -26,8 +26,10 @@ extension ChecklistItem: Decodable {
             checked: json => "checked"
         )
     }
+}
 
-    func encode() -> AnyObject {
+extension ChecklistItem: JSONEncodable {
+    func JSONEncode() throws -> AnyObject {
         return ["title": title, "checked": checked]
     }
 }

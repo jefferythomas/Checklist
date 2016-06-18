@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B4F035D1D09022E00668867 /* JSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4F035C1D09022E00668867 /* JSONEncodable.swift */; };
 		7B72C5BB1CFE78FD006E9923 /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B72C5B91CFE78FD006E9923 /* OMGHTTPURLRQ.framework */; };
 		7B72C5BC1CFE78FD006E9923 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */; };
 		7B72C5BF1D01911D006E9923 /* ChecklistDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B4F035C1D09022E00668867 /* JSONEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncodable.swift; sourceTree = "<group>"; };
 		7B72C5B91CFE78FD006E9923 /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDataSet.swift; sourceTree = "<group>"; };
@@ -97,6 +99,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B4F035A1D09021200668867 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		7B4F035B1D09021200668867 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7B4F035C1D09022E00668867 /* JSONEncodable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		7B75C5931CE95FDC0047AACF /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,7 +159,9 @@
 		7BB76A8C1CE7B43500D05C9C /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				7B4F035A1D09021200668867 /* Extension */,
 				7B75C5931CE95FDC0047AACF /* Models */,
+				7B4F035B1D09021200668867 /* Protocols */,
 				7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */,
 				7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */,
 				7BB76A911CE7B43500D05C9C /* DetailViewController.swift */,
@@ -345,6 +364,7 @@
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
 				7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */,
 				7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */,
+				7B4F035D1D09022E00668867 /* JSONEncodable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

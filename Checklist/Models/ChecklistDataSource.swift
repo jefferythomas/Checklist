@@ -22,24 +22,28 @@ class ChecklistDataSource {
         return dispatch_promise {
             let URL = try self.URLForIdentifier(identifier)
 
-            if let data = NSData(contentsOfURL: URL) {
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-                return try ChecklistDataSet.decode(json)
-            } else {
+            let data = try NSData(contentsOfURL: URL, options: [])
+            let JSON = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+
+            return try ChecklistDataSet.decode(JSON)
+        } .recover { error -> ChecklistDataSet in
+            if (error as NSError).code == NSFileReadNoSuchFileError {
                 return ChecklistDataSet(identifier: identifier, checklists:[])
             }
+
+            throw error
         }
     }
 
-    func storeChecklists(dataSet: ChecklistDataSet) -> Promise<ChecklistDataSet> {
+    func updateChecklists(dataSet: ChecklistDataSet) -> Promise<ChecklistDataSet> {
         return dispatch_promise {
-            let options: NSDataWritingOptions = []
             let URL = try self.URLForIdentifier(dataSet.identifier)
-            let json = dataSet.encode()
+            let JSON = try dataSet.JSONEncode()
 
-            try NSJSONSerialization.dataWithJSONObject(json, options: []).writeToURL(URL, options: options)
+            let data = try NSJSONSerialization.dataWithJSONObject(JSON, options: [])
+            try data.writeToURL(URL, options: [])
 
-            return dataSet
+            return dataSet // JLT: For now, echo back the input
         }
     }
 

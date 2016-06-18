@@ -29,33 +29,25 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistItemDecode() {
-        do {
-            let json = ["title": "test", "checked": true]
+        let json = ["title": "test", "checked": true]
 
-            let item = try ChecklistItem.decode(json)
+        let item = try? ChecklistItem.decode(json)
 
-            XCTAssertEqual(item, ChecklistItem(title: "test", checked: true))
-        } catch {
-            XCTFail("error: \(error)")
-        }
+        XCTAssertEqual(item, ChecklistItem(title: "test", checked: true))
     }
 
     func testChecklistItemDecodeArray() {
-        do {
-            let json = [["title": "test", "checked": true]]
+        let json = [["title": "test", "checked": true]]
 
-            let items = try [ChecklistItem].decode(json)
+        let items = try? [ChecklistItem].decode(json)
 
-            XCTAssertEqual(items.first, ChecklistItem(title: "test", checked: true))
-        } catch {
-            XCTFail("error: \(error)")
-        }
+        XCTAssertEqual(items?.first, ChecklistItem(title: "test", checked: true))
     }
 
     func testChecklistItemEncode() {
         let item = ChecklistItem(title: "test", checked: false)
 
-        let json = item.encode()
+        let json = try? item.JSONEncode()
 
         let title = (json as? [String: AnyObject])?["title"] as? String
         let checked = (json as? [String: AnyObject])?["checked"] as? Bool
@@ -81,22 +73,18 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistDecode() {
-        do {
-            let json = ["title": "test", "items": [["title": "test", "checked": true]]]
+        let json = ["title": "test", "items": [["title": "test", "checked": true]]]
 
-            let checklist = try Checklist.decode(json)
+        let checklist = try? Checklist.decode(json)
 
-            XCTAssertEqual(checklist.title, "test")
-            XCTAssertEqual(checklist.items.first, ChecklistItem(title: "test", checked: true))
-        } catch {
-            XCTFail("error: \(error)")
-        }
+        XCTAssertEqual(checklist?.title, "test")
+        XCTAssertEqual(checklist?.items.first, ChecklistItem(title: "test", checked: true))
     }
 
     func testChecklistEncode() {
         let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: true)])
 
-        let json = checklist.encode()
+        let json = try? checklist.JSONEncode()
 
         let title = (json as? [String: AnyObject])?["title"] as? String
         let items = (json as? [String: AnyObject])?["items"] as? [[String: AnyObject]]
@@ -111,25 +99,17 @@ class ChecklistTests: XCTestCase {
     func testChecklistDataSourceURLForIdentifier() {
         let dataSource = ChecklistDataSource()
 
-        do {
-            let URL = try dataSource.URLForIdentifier("test")
+        let URL = try? dataSource.URLForIdentifier("test")
 
-            XCTAssertEqual(URL.lastPathComponent, "test.json")
-        } catch {
-            XCTFail("error: \(error)")
-        }
+        XCTAssertEqual(URL?.lastPathComponent, "test.json")
     }
 
     func testChecklistDataSourceURLForIdentifierWithSpecialCharacters() {
         let dataSource = ChecklistDataSource()
 
-        do {
-            let URL = try dataSource.URLForIdentifier("test test./")
+        let URL = try? dataSource.URLForIdentifier("test test./")
 
-            XCTAssertEqual(URL.lastPathComponent, "test%20test%2E%2F.json")
-        } catch {
-            XCTFail("error: \(error)")
-        }
+        XCTAssertEqual(URL?.lastPathComponent, "test%20test%2E%2F.json")
     }
 
     func testChecklistDataSourceStore() {
@@ -140,7 +120,10 @@ class ChecklistTests: XCTestCase {
         let initialDataSet = ChecklistDataSet(identifier: UUID, checklists: [checklist])
 
         let dataSource = ChecklistDataSource()
-        dataSource.storeChecklists(initialDataSet).then { storedDataSet -> () in
+
+        firstly {
+            return dataSource.updateChecklists(initialDataSet)
+        } .then { storedDataSet -> () in
             let URL = try dataSource.URLForIdentifier(storedDataSet.identifier)
 
             XCTAssertEqual(storedDataSet.checklists.count, 1)
@@ -149,9 +132,9 @@ class ChecklistTests: XCTestCase {
             XCTAssertTrue(dataSource.fileManager.fileExistsAtPath(URL.path!))
             try dataSource.fileManager.removeItemAtURL(URL)
             XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        }.recover { error in
+        } .recover { error in
             XCTFail("error: \(error)")
-        }.always {
+        } .always {
             expectation.fulfill()
         }
 
@@ -166,10 +149,10 @@ class ChecklistTests: XCTestCase {
         let dataSource = ChecklistDataSource()
 
         firstly {
-            return dataSource.storeChecklists(initialDataSet)
-        }.then { storedDataSet in
+            return dataSource.updateChecklists(initialDataSet)
+        } .then { storedDataSet in
             return dataSource.fetchChecklistsWithIdentifier(storedDataSet.identifier)
-        }.then { fetchedDataSet -> () in
+        } .then { fetchedDataSet -> () in
             let URL = try dataSource.URLForIdentifier(fetchedDataSet.identifier)
 
             XCTAssertEqual(fetchedDataSet.checklists.count, 1)
@@ -178,9 +161,9 @@ class ChecklistTests: XCTestCase {
             XCTAssertTrue(dataSource.fileManager.fileExistsAtPath(URL.path!))
             try dataSource.fileManager.removeItemAtURL(URL)
             XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        }.recover { error in
+        } .recover { error in
                 XCTFail("error: \(error)")
-        }.always {
+        } .always {
                 expectation.fulfill()
         }
 
@@ -194,15 +177,15 @@ class ChecklistTests: XCTestCase {
 
         firstly {
             return dataSource.fetchChecklistsWithIdentifier(NSUUID().UUIDString)
-        }.then { fetchedDataSet -> () in
+        } .then { fetchedDataSet -> () in
             let URL = try dataSource.URLForIdentifier(fetchedDataSet.identifier)
 
             XCTAssertEqual(fetchedDataSet.checklists.count, 0)
 
             XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        }.recover { error in
+        } .recover { error in
             XCTFail("error: \(error)")
-        }.always {
+        } .always {
             expectation.fulfill()
         }
         
