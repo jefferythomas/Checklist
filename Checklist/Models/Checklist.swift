@@ -15,7 +15,7 @@ struct Checklist {
 }
 
 extension Checklist: Decodable {
-    static func decode(json: AnyObject) throws -> Checklist {
+    static func decode(_ json: Any) throws -> Checklist {
         return try self.init(
             title: json => "title",
             items: json => "items"
@@ -24,7 +24,7 @@ extension Checklist: Decodable {
 }
 
 extension Checklist: JSONEncodable {
-    func JSONEncode() throws -> AnyObject {
+    func JSONEncode() throws -> Any {
         return ["title": title, "items": try items.JSONEncode()]
     }
 }

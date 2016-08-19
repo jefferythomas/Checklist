@@ -26,8 +26,8 @@ class DecodableExtensionTests: XCTestCase {
         let anyObject = 0
         //when
         do {
-            try String.decode(anyObject)
-        } catch is TypeMismatchError {
+            _ = try String.decode(anyObject)
+        } catch DecodingError.typeMismatch {
             //then
             XCTAssertTrue(true)
         } catch {
@@ -50,8 +50,8 @@ class DecodableExtensionTests: XCTestCase {
         let anyObject = ""
         //when
         do {
-            try Int.decode(anyObject)
-        } catch is TypeMismatchError {
+            _ = try Int.decode(anyObject)
+        } catch DecodingError.typeMismatch {
             //then
             XCTAssertTrue(true)
         } catch {
@@ -74,8 +74,8 @@ class DecodableExtensionTests: XCTestCase {
         let anyObject = ""
         //when
         do {
-            try Double.decode(anyObject)
-        } catch is TypeMismatchError {
+            _ = try Double.decode(anyObject)
+        } catch DecodingError.typeMismatch {
             //then
             XCTAssertTrue(true)
         } catch {
@@ -98,8 +98,8 @@ class DecodableExtensionTests: XCTestCase {
         let anyObject = ""
         //when
         do {
-            try Bool.decode(anyObject)
-        } catch is TypeMismatchError {
+            _ = try Bool.decode(anyObject)
+        } catch DecodingError.typeMismatch {
             //then
             XCTAssertTrue(true)
         } catch {

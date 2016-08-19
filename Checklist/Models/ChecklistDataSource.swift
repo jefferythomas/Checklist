@@ -11,19 +11,19 @@ import PromiseKit
 import Decodable
 
 class ChecklistDataSource {
-    lazy var fileManager = NSFileManager.defaultManager()
+    lazy var fileManager = FileManager.default
 
-    enum Error: ErrorType {
-        case NoDocumentDirectoryInUserDomain
-        case UnableToEncodeIdentifier(identifer: String)
+    enum ErrorX: Error {
+        case noDocumentDirectoryInUserDomain
+        case unableToEncodeIdentifier(identifer: String)
     }
 
-    func fetchChecklistsWithIdentifier(identifier: String) -> Promise<ChecklistDataSet> {
-        return dispatch_promise {
+    func fetchChecklistsWithIdentifier(_ identifier: String) -> Promise<ChecklistDataSet> {
+        return DispatchQueue.main.promise {
             let URL = try self.URLForIdentifier(identifier)
 
-            let data = try NSData(contentsOfURL: URL, options: [])
-            let JSON = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+            let data = try Data(contentsOf: URL)
+            let JSON = try JSONSerialization.jsonObject(with: data)
 
             return try ChecklistDataSet.decode(JSON)
         } .recover { error -> ChecklistDataSet in
@@ -35,32 +35,32 @@ class ChecklistDataSource {
         }
     }
 
-    func updateChecklists(dataSet: ChecklistDataSet) -> Promise<ChecklistDataSet> {
-        return dispatch_promise {
+    func updateChecklists(_ dataSet: ChecklistDataSet) -> Promise<ChecklistDataSet> {
+        return DispatchQueue.main.promise {
             let URL = try self.URLForIdentifier(dataSet.identifier)
             let JSON = try dataSet.JSONEncode()
 
-            let data = try NSJSONSerialization.dataWithJSONObject(JSON, options: [])
-            try data.writeToURL(URL, options: [])
+            let data = try JSONSerialization.data(withJSONObject: JSON)
+            try data.write(to: URL)
 
             return dataSet // JLT: For now, echo back the input
         }
     }
 
-    func URLForIdentifier(identifier: String) throws -> NSURL {
-        let directory: NSSearchPathDirectory = .DocumentDirectory
-        let domains: NSSearchPathDomainMask = [.UserDomainMask]
+    func URLForIdentifier(_ identifier: String) throws -> URL {
+        let directory: FileManager.SearchPathDirectory = .documentDirectory
+        let domains: FileManager.SearchPathDomainMask = [.userDomainMask]
         let string = NSString(string: identifier)
-        let allowedSet = NSCharacterSet.alphanumericCharacterSet() // JLT: Escape nearly everything
+        let allowedSet = CharacterSet.alphanumerics // JLT: Escape nearly everything
 
-        guard let baseURL = fileManager.URLsForDirectory(directory, inDomains: domains).first else {
-            throw Error.NoDocumentDirectoryInUserDomain
+        guard let baseURL = fileManager.urls(for: directory, in: domains).first else {
+            throw ErrorX.noDocumentDirectoryInUserDomain
         }
 
-        guard let encodedString = string.stringByAddingPercentEncodingWithAllowedCharacters(allowedSet) else {
-            throw Error.UnableToEncodeIdentifier(identifer: identifier)
+        guard let encodedString = string.addingPercentEncoding(withAllowedCharacters: allowedSet) else {
+            throw ErrorX.unableToEncodeIdentifier(identifer: identifier)
         }
 
-        return baseURL.URLByAppendingPathComponent(encodedString).URLByAppendingPathExtension("json")
+        return baseURL.appendingPathComponent(encodedString).appendingPathExtension("json")
     }
 }

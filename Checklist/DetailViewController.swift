@@ -10,13 +10,13 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    var detailItem: AnyObject? { didSet { self.configureView() } }
+    var detailItem: Date? { didSet { self.configureView() } }
 
     @IBOutlet var detailDescriptionLabel: UILabel?
 
     func configureView() {
         if let detailItem = self.detailItem {
-            self.detailDescriptionLabel?.text = detailItem.description ?? "No Description"
+            self.detailDescriptionLabel?.text = detailItem.description
         } else {
             self.detailDescriptionLabel?.text = "No Content"
         }
@@ -27,7 +27,7 @@ class DetailViewController: UIViewController {
         self.configureView()
 
         if let splitViewController = self.splitViewController {
-            self.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+            self.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
             self.navigationItem.leftItemsSupplementBackButton = true
         }
     }

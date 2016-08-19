@@ -29,7 +29,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistItemDecode() {
-        let json = ["title": "test", "checked": true]
+        let json: [String: Any] = ["title": "test", "checked": true]
 
         let item = try? ChecklistItem.decode(json)
 
@@ -73,7 +73,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistDecode() {
-        let json = ["title": "test", "items": [["title": "test", "checked": true]]]
+        let json: [String: Any] = ["title": "test", "items": [["title": "test", "checked": true]]]
 
         let checklist = try? Checklist.decode(json)
 
@@ -113,83 +113,83 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistDataSourceStore() {
-        let expectation = expectationWithDescription("testChecklistDataSourceStore")
+        let ex = expectation(description: "testChecklistDataSourceStore")
 
-        let UUID = NSUUID().UUIDString
+        let UUID = NSUUID().uuidString
         let checklist = Checklist(title: "test", items: [])
-        let initialDataSet = ChecklistDataSet(identifier: UUID, checklists: [checklist])
+        let dataSet = ChecklistDataSet(identifier: UUID, checklists: [checklist])
 
         let dataSource = ChecklistDataSource()
 
         firstly {
-            return dataSource.updateChecklists(initialDataSet)
-        } .then { storedDataSet -> () in
-            let URL = try dataSource.URLForIdentifier(storedDataSet.identifier)
+            return dataSource.updateChecklists(dataSet)
+        } .then { dataSet -> () in
+            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
 
-            XCTAssertEqual(storedDataSet.checklists.count, 1)
-            XCTAssertEqual(storedDataSet.checklists.first?.title, "test")
+            XCTAssertEqual(dataSet.checklists.count, 1)
+            XCTAssertEqual(dataSet.checklists.first?.title, "test")
 
-            XCTAssertTrue(dataSource.fileManager.fileExistsAtPath(URL.path!))
-            try dataSource.fileManager.removeItemAtURL(URL)
-            XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        } .recover { error in
-            XCTFail("error: \(error)")
+            XCTAssertTrue(dataSource.fileManager.fileExists(atPath: URL.path))
+            try dataSource.fileManager.removeItem(at: URL)
+            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
         } .always {
-            expectation.fulfill()
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
         }
 
-        waitForExpectationsWithTimeout(1.0) { error in XCTAssertNil(error) }
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
     func testChecklistDataSourceFetch() {
-        let expectation = expectationWithDescription("testChecklistDataSourceFetch")
+        let ex = expectation(description: "testChecklistDataSourceFetch")
 
         let checklist = Checklist(title: "test", items: [])
-        let initialDataSet = ChecklistDataSet(identifier: NSUUID().UUIDString, checklists: [checklist])
+        let dataSet = ChecklistDataSet(identifier: NSUUID().uuidString, checklists: [checklist])
         let dataSource = ChecklistDataSource()
 
         firstly {
-            return dataSource.updateChecklists(initialDataSet)
-        } .then { storedDataSet in
-            return dataSource.fetchChecklistsWithIdentifier(storedDataSet.identifier)
-        } .then { fetchedDataSet -> () in
-            let URL = try dataSource.URLForIdentifier(fetchedDataSet.identifier)
+            return dataSource.updateChecklists(dataSet)
+        } .then { dataSet in
+            return dataSource.fetchChecklistsWithIdentifier(dataSet.identifier)
+        } .then { dataSet -> () in
+            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
 
-            XCTAssertEqual(fetchedDataSet.checklists.count, 1)
-            XCTAssertEqual(fetchedDataSet.checklists.first?.title, "test")
+            XCTAssertEqual(dataSet.checklists.count, 1)
+            XCTAssertEqual(dataSet.checklists.first?.title, "test")
 
-            XCTAssertTrue(dataSource.fileManager.fileExistsAtPath(URL.path!))
-            try dataSource.fileManager.removeItemAtURL(URL)
-            XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        } .recover { error in
-                XCTFail("error: \(error)")
+            XCTAssertTrue(dataSource.fileManager.fileExists(atPath: URL.path))
+            try dataSource.fileManager.removeItem(at: URL)
+            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
         } .always {
-                expectation.fulfill()
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
         }
 
-        waitForExpectationsWithTimeout(1.0) { error in XCTAssertNil(error) }
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
     func testChecklistDataSourceFetchCreate() {
-        let expectation = expectationWithDescription("testChecklistDataSourceFetchCreate")
+        let ex = expectation(description: "testChecklistDataSourceFetchCreate")
 
         let dataSource = ChecklistDataSource()
 
         firstly {
-            return dataSource.fetchChecklistsWithIdentifier(NSUUID().UUIDString)
-        } .then { fetchedDataSet -> () in
-            let URL = try dataSource.URLForIdentifier(fetchedDataSet.identifier)
+            return dataSource.fetchChecklistsWithIdentifier(NSUUID().uuidString)
+        } .then { dataSet -> () in
+            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
 
-            XCTAssertEqual(fetchedDataSet.checklists.count, 0)
+            XCTAssertEqual(dataSet.checklists.count, 0)
 
-            XCTAssertFalse(dataSource.fileManager.fileExistsAtPath(URL.path!))
-        } .recover { error in
-            XCTFail("error: \(error)")
+            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
         } .always {
-            expectation.fulfill()
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
         }
         
-        waitForExpectationsWithTimeout(1.0) { error in XCTAssertNil(error) }
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
 }

@@ -1,3 +1,2 @@
-github "Anviking/Decodable" "v0.4.2"
-github "mxcl/OMGHTTPURLRQ" "3.1.2"
-github "mxcl/PromiseKit" "3.2.0"
+github "Anviking/Decodable" "7135fe9e378561d8523725b98af8db5f3c52e60b"
+github "mxcl/PromiseKit" "7743792ca36a76aee8c02b155c92f441f838eaa2"

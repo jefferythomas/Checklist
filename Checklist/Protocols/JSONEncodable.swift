@@ -9,11 +9,11 @@
 import Foundation
 
 protocol JSONEncodable {
-    func JSONEncode() throws -> AnyObject
+    func JSONEncode() throws -> Any
 }
 
-extension CollectionType where Generator.Element: JSONEncodable {
-    func JSONEncode() throws -> AnyObject {
+extension Collection where Iterator.Element: JSONEncodable {
+    func JSONEncode() throws -> Any {
         return try map { element in try element.JSONEncode() }
     }
 }

@@ -8,8 +8,8 @@
 
 import Decodable
 
-enum ChecklistDataSetError: ErrorType {
-    case InvalidIndex(index: Int)
+enum ChecklistDataSetError: Error {
+    case invalidIndex(index: Int)
 }
 
 class ChecklistDataSet {
@@ -23,13 +23,13 @@ class ChecklistDataSet {
 }
 
 extension ChecklistDataSet: Decodable {
-    static func decode(json: AnyObject) throws -> Self {
+    static func decode(_ json: Any) throws -> Self {
         return try self.init(identifier: json => "identifier", checklists: json => "checklists")
     }
 }
 
 extension ChecklistDataSet: JSONEncodable {
-    func JSONEncode() throws -> AnyObject {
+    func JSONEncode() throws -> Any {
         return ["identifier": identifier, "checklists": try checklists.JSONEncode()]
     }
 }

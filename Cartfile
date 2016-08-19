@@ -1,2 +1,2 @@
-github "Anviking/Decodable"
-github "mxcl/PromiseKit" ~> 3.0
+github "Anviking/Decodable" "master"
+github "mxcl/PromiseKit" "swift-3.0" 

@@ -12,18 +12,18 @@ class MasterViewController: UITableViewController {
 
     var objects = [AnyObject]()
 
-    @IBAction func insertNewObject(sender: AnyObject) {
-        self.insertObject(NSDate(), atIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+    @IBAction func insertNewObject(_ sender: AnyObject) {
+        self.insertObject(Date() as AnyObject, atIndexPath: IndexPath(row: 0, section: 0))
     }
 
-    func insertObject(object: AnyObject, atIndexPath indexPath: NSIndexPath) {
-        objects.insert(object, atIndex: indexPath.row)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    func insertObject(_ object: AnyObject, atIndexPath indexPath: IndexPath) {
+        objects.insert(object, at: (indexPath as NSIndexPath).row)
+        self.tableView.insertRows(at: [indexPath], with: .automatic)
     }
 
-    func deleteObjectAtIndexPath(indexPath: NSIndexPath) {
-        objects.removeAtIndex(indexPath.row)
-        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+    func deleteObjectAtIndexPath(_ indexPath: IndexPath) {
+        objects.remove(at: (indexPath as NSIndexPath).row)
+        self.tableView.deleteRows(at: [indexPath], with: .fade)
     }
 
     // MARK: View lifecycle
@@ -32,25 +32,25 @@ class MasterViewController: UITableViewController {
         super.viewDidLoad()
 
         let addAction = #selector(insertNewObject(_:))
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: addAction)
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: addAction)
 
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButton
     }
 
-    override func viewWillAppear(animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController?.collapsed ?? true
+    override func viewWillAppear(_ animated: Bool) {
+        self.clearsSelectionOnViewWillAppear = self.splitViewController?.isCollapsed ?? true
         super.viewWillAppear(animated)
     }
 
     // MARK: Segues
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow  {
-                let navigationController = segue.destinationViewController as? UINavigationController
+                let navigationController = segue.destination as? UINavigationController
                 let detailViewController = navigationController?.topViewController as? DetailViewController
-                let object = objects[indexPath.row] as? NSDate
+                let object = objects[(indexPath as NSIndexPath).row] as? Date
 
                 detailViewController?.detailItem = object
             }
@@ -59,31 +59,31 @@ class MasterViewController: UITableViewController {
 
     // MARK: Table View
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.objects.count
     }
 
-    override func tableView(tableView: UITableView,
-                            cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        let object = objects[indexPath.row] as? NSDate
+        let object = objects[(indexPath as NSIndexPath).row] as? Date
         cell.textLabel?.text = object?.description
         return cell
     }
 
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    override func tableView(tableView: UITableView,
-                            commitEditingStyle editingStyle: UITableViewCellEditingStyle,
-                            forRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCellEditingStyle,
+                            forRowAt indexPath: IndexPath)
     {
         switch editingStyle {
-        case .Delete: self.deleteObjectAtIndexPath(indexPath)
-        case .Insert: self.insertObject(NSDate(), atIndexPath: indexPath)
+        case .delete: self.deleteObjectAtIndexPath(indexPath)
+        case .insert: self.insertObject(Date() as AnyObject, atIndexPath: indexPath)
         default:      break
         }
     }

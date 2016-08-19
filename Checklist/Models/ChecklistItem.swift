@@ -20,7 +20,7 @@ func == (lhs: ChecklistItem, rhs: ChecklistItem) -> Bool {
 }
 
 extension ChecklistItem: Decodable {
-    static func decode(json: AnyObject) throws -> ChecklistItem {
+    static func decode(_ json: Any) throws -> ChecklistItem {
         return try self.init(
             title: json => "title",
             checked: json => "checked"
@@ -29,7 +29,7 @@ extension ChecklistItem: Decodable {
 }
 
 extension ChecklistItem: JSONEncodable {
-    func JSONEncode() throws -> AnyObject {
+    func JSONEncode() throws -> Any {
         return ["title": title, "checked": checked]
     }
 }

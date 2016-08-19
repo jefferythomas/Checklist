@@ -17,9 +17,7 @@ class AppDelegate: UIResponder {
 
 extension AppDelegate: UIApplicationDelegate {
 
-    func application(application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
-    {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         let splitViewController = self.window?.rootViewController as? UISplitViewController
         splitViewController?.delegate = self
 
@@ -30,9 +28,9 @@ extension AppDelegate: UIApplicationDelegate {
 
 extension AppDelegate: UISplitViewControllerDelegate {
 
-    func splitViewController(splitViewController: UISplitViewController,
-                             collapseSecondaryViewController secondaryViewController: UIViewController,
-                             ontoPrimaryViewController primaryViewController: UIViewController) -> Bool
+    func splitViewController(_ splitViewController: UISplitViewController,
+                             collapseSecondary secondaryViewController: UIViewController,
+                             onto primaryViewController: UIViewController) -> Bool
     {
         let navigationController = secondaryViewController as? UINavigationController
         guard let viewController = navigationController?.topViewController as? DetailViewController else {
