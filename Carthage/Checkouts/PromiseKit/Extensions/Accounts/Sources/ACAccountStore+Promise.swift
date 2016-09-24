@@ -15,12 +15,12 @@ import PromiseKit
 */
 extension ACAccountStore {
     /// Renews account credentials when the credentials are no longer valid.
-    public func renewCredentialsForAccount(_ account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
-        return Promise.wrap { renewCredentials(for: account, completion: $0) }
+    public func renewCredentials(for account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
+        return PromiseKit.wrap { renewCredentials(for: account, completion: $0) }
     }
 
     /// Obtains permission to access protected user properties.
-    public func requestAccessToAccountsWithType(_ type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
+    public func requestAccessToAccounts(with type: ACAccountType, options: [AnyHashable: Any]? = nil) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
             requestAccessToAccounts(with: type, options: options, completion: { granted, error in
                 if granted {
@@ -36,20 +36,20 @@ extension ACAccountStore {
 
     /// Saves an account to the Accounts database.
     public func saveAccount(_ account: ACAccount) -> Promise<Void> {
-        return Promise<Bool>.wrap { saveAccount(account, withCompletionHandler: $0) }.asVoid()
+        return PromiseKit.wrap { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     /// Removes an account from the account store.
     public func removeAccount(_ account: ACAccount) -> Promise<Void> {
-        return Promise<Bool>.wrap { removeAccount(account, withCompletionHandler: $0) }.asVoid()
+        return PromiseKit.wrap { removeAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     /// PromiseKit ACAccountStore errors
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, CustomStringConvertible {
         /// The request for accounts access was denied.
         case accessDenied
 
-        public var localizedDescription: String {
+        public var description: String {
             switch self {
             case .accessDenied:
                 return "Access to the requested social service has been denied. Please enable access in your device settings."

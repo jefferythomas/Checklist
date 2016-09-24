@@ -32,14 +32,14 @@
 
 /**
  Determines the device’s location using the provided block to determine
- which locations are acceptable.
+ when locations become acceptably accurate.
 
  With this variant you can wait for good accuracy or acceptable accuracy
- (at your own determination) if the `CLLocationManager` is taking too
+ (at your own discretion) if the `CLLocationManager` is taking too
  long. For example, the user is not outside so you will never get 10 meter
  accuracy, but it would be nice to wait a little just in case.
 
- @see +promise
+ - see +promise
 */
 + (AnyPromise *)until:(BOOL(^)(CLLocation *))isLocationGoodBlock NS_REFINED_FOR_SWIFT;
 

@@ -12,7 +12,8 @@ class NSURLSessionTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        URLSession.GET("http://example.com").asDictionary().then { rsp -> Void in
+        let rq = URLRequest(url: URL(string: "http://example.com")!)
+        URLSession.shared.dataTask(with: rq).asDictionary().then { rsp -> Void in
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }
@@ -31,12 +32,14 @@ class NSURLSessionTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
+        let rq = URLRequest(url: URL(string: "http://example.com")!)
 
         after(interval: 0.1).then {
-            URLSession.GET("http://example.com")
+            URLSession.shared.dataTask(with: rq)
         }.then { x -> Void in
             XCTAssertEqual(x, dummy)
-        }.then(execute: ex.fulfill)
+            ex.fulfill()
+        }
 
         waitForExpectations(timeout: 1)
     }

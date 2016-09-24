@@ -1,10 +1,12 @@
 #import <Foundation/NSDictionary.h>
-#import <Foundation/NSError.h>
 #import <Foundation/NSFileHandle.h>
+#import <PromiseKit/PromiseKit.h>
 #import <Foundation/NSString.h>
-#import "PMKFoundation.h"
+#import <Foundation/NSError.h>
 
 #if TARGET_OS_MAC && !TARGET_OS_EMBEDDED && !TARGET_OS_SIMULATOR
+
+#import "NSTask+AnyPromise.h"
 
 @implementation NSTask (PromiseKit)
 

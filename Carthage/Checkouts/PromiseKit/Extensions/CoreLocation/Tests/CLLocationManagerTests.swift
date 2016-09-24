@@ -23,7 +23,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
         swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
             let ex = expectation(description: "")
 
-            CLLocationManager.promise().allResults().then { x -> Void in
+            CLLocationManager.promise().asArray().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
@@ -62,7 +62,7 @@ extension CLLocationManager {
 /////////////////////////////////////////////////////////////// utilities
 import ObjectiveC
 
-func swizzle(_ foo: AnyClass, _ from: Selector, isClassMethod: Bool = false, body: @noescape () -> Void) {
+func swizzle(_ foo: AnyClass, _ from: Selector, isClassMethod: Bool = false, body: () -> Void) {
     let originalMethod: Method
     let swizzledMethod: Method
 

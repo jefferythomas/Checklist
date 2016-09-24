@@ -15,7 +15,7 @@ class Test_ACAccountStore_Swift: XCTestCase {
             }
         }
 
-        MockAccountStore().renewCredentialsForAccount(dummy).then { result -> Void in
+        MockAccountStore().renewCredentials(for: dummy).then { result -> Void in
             XCTAssertEqual(result, ACAccountCredentialRenewResult.renewed)
             ex.fulfill()
         }
@@ -33,7 +33,7 @@ class Test_ACAccountStore_Swift: XCTestCase {
         let ex = expectation(description: "")
         let store = MockAccountStore()
         let type = store.accountType(withAccountTypeIdentifier: ACAccountTypeIdentifierFacebook)!
-        store.requestAccessToAccountsWithType(type).then { _ in
+        store.requestAccessToAccounts(with: type).then { _ in
             ex.fulfill()
         }
 

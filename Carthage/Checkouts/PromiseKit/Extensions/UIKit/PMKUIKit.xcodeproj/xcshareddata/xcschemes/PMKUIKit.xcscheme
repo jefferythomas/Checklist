@@ -63,7 +63,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "UIImagePickerControllerTests">
+                  Identifier = "UIImagePickerControllerTests/test_fulfills_with_edited_image()">
                </Test>
             </SkippedTests>
          </TestableReference>

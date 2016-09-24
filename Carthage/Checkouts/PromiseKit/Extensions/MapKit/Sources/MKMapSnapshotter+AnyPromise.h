@@ -18,6 +18,6 @@
 
  @return A promise that fulfills with the generated `MKMapSnapshot` object.
 */
-- (AnyPromise *)promise;
+- (AnyPromise *)start NS_REFINED_FOR_SWIFT;
 
 @end

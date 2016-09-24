@@ -30,16 +30,29 @@ extension UIViewController {
 
 extension MFMailComposeViewController {
     /// Errors representing PromiseKit MFMailComposeViewController failures
-    public enum Error: CancellableError {
+    public enum Error: CancellableError, CustomStringConvertible {
         /// The user cancelled sending mail
         case cancelled
+        case failed
 
         /// - Returns: true
         public var isCancelled: Bool {
             switch self {
             case .cancelled:
                 return true
+            case .failed:
+                return false
             }
+        }
+        
+        public var description: String {
+            switch self {
+            case .failed:
+                return "The attempt to save or send the message was unsuccessful."
+            case .cancelled:
+                return "The mail was cancelled"
+            }
+                
         }
     }
 }
@@ -57,10 +70,7 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
         } else {
             switch result {
             case .failed:
-                var info = [AnyHashable: Any]()
-                info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-                info[NSUnderlyingErrorKey] = NSNumber(value: result.rawValue)
-                reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
+                reject(MFMailComposeViewController.Error.failed)
             case .cancelled:
                 reject(MFMailComposeViewController.Error.cancelled)
             default:

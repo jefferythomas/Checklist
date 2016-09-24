@@ -3,7 +3,7 @@
 
 @implementation MKMapSnapshotter (PromiseKit)
 
-- (AnyPromise *)promise {
+- (AnyPromise *)start {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         [self startWithCompletionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
             resolve(error ?: snapshot);

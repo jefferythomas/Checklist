@@ -13,7 +13,7 @@ class Test_EventKit_Swift: XCTestCase {
         #else
             let ex = expectation(description: "")
             EKEventStoreRequestAccess().always(execute: ex.fulfill)
-            waitForExpectations(timeout: 30, handler: nil)
+            waitForExpectations(timeout: 30)
         #endif
     }
 }

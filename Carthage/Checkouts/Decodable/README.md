@@ -3,8 +3,7 @@ Simple and strict, yet powerful object mapping made possible by Swift 2's error 
 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods version](https://cocoapod-badges.herokuapp.com/v/Decodable/badge.png)](https://cocoapods.org/pods/Decodable)
-[![Platforms](https://cocoapod-badges.herokuapp.com/p/Decodable/badge.png
-)](https://cocoadocs.org/docsets/NSStringMask)
+[![Platforms](https://cocoapod-badges.herokuapp.com/p/Decodable/badge.png)](https://cocoadocs.org/docsets/NSStringMask)
 [![Travis](https://img.shields.io/travis/Anviking/Decodable/master.svg)](https://travis-ci.org/Anviking/Decodable/branches)
 
 
@@ -23,7 +22,7 @@ struct Repository {
 }
 
 extension Repository: Decodable {
-    static func decode(j: AnyObject) throws -> Repository {
+    static func decode(j: Any) throws -> Repository {
         return try Repository(
                     name: j => "nested" => "name", 
                     description: j => "description", 
@@ -137,7 +136,7 @@ For convenience there is an operator, `=>?`, that only returns nil on missing ke
 ```swift
 public protocol DynamicDecodable {
     associatedtype DecodedType
-    static var decoder: (AnyObject) throws -> DecodedType {get set}
+    static var decoder: (Any) throws -> DecodedType {get set}
 }
 ```
 This allows Decodable to implement default decoding closures while allowing you to override them as needed.
@@ -154,7 +153,13 @@ Bool.decoder = { json in
     }
 }
 ```
+
 Note that when extending new types to conform to `Decodable` there is really no point in conforming to `DynamicDecodable` since you already control the implementation. Also note that the `decoder` properties are intended as "set once". If you need different behaviour on different occations, please create custom decode functions.
+
+The default `Date.decoder` uses a ISO8601 date formatter. If you don't want to create your own decode closure there's a helper:
+```swift
+Date.decoder = Date.decoder(using: formatter)
+```
 
 ## When `Decodable` isn't enough
 Don't be afraid of not conforming to `Decodable`.
@@ -172,6 +177,6 @@ let array = try NSArray.decode(json => "list").map {
 
 | Swift version | Compatible tag or branch |
 | --- | --- |
-| Swift 3.0 | `master` |
+| Swift 3.0 | `v0.5` |
 | Swift 2.3 | `v0.4.4`|
 | Swift 2.2 | `v0.4.3`|

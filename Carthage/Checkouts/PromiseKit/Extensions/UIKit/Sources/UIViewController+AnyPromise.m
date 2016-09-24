@@ -1,15 +1,12 @@
-#import <UIKit/UIImagePickerController.h>
 #import <UIKit/UINavigationController.h>
+#import "UIViewController+AnyPromise.h"
 #import <PromiseKit/PromiseKit.h>
-#import <PMKUIKit/PMKUIKit.h>
 
-
-#if TARGET_OS_TV
-#define UIImagePickerControllerDelegate UINavigationControllerDelegate
+#if PMKImagePickerController
+#import <UIKit/UIImagePickerController.h>
 #endif
 
-
-@interface PMKGenericDelegate : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface PMKGenericDelegate : NSObject <UINavigationControllerDelegate> {
 @public
     PMKResolver resolve;
 }
@@ -32,10 +29,10 @@
         PMKGenericDelegate *delegate = [PMKGenericDelegate delegateWithPromise:&promise];
         [vc setValue:delegate forKey:@"messageComposeDelegate"];
     }
-#if !TARGET_OS_TV
-    else if ([vc isKindOfClass:NSClassFromString(@"UIImagePickerController")]) {
+#ifdef PMKImagePickerController
+    else if ([vc isKindOfClass:[UIImagePickerController class]]) {
         PMKGenericDelegate *delegate = [PMKGenericDelegate delegateWithPromise:&promise];
-        ((UIImagePickerController *)vc).delegate = delegate;
+        [vc setValue:delegate forKey:@"delegate"];
     }
 #endif
     else if ([vc isKindOfClass:NSClassFromString(@"SLComposeViewController")]) {
@@ -114,7 +111,7 @@
 
 - (void)messageComposeViewController:(id)controller didFinishWithResult:(int)result {
     if (result == 2) {
-        id userInfo = @{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."};
+        id userInfo = @{NSLocalizedDescriptionKey: @"The attempt to save or send the message was unsuccessful."};
         id error = [NSError errorWithDomain:PMKErrorDomain code:PMKOperationFailed userInfo:userInfo];
         resolve(error);
     } else {
@@ -123,7 +120,8 @@
     retainCycle = nil;
 }
 
-#if !TARGET_OS_TV
+#ifdef PMKImagePickerController
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     id img = info[UIImagePickerControllerEditedImage] ?: info[UIImagePickerControllerOriginalImage];
     resolve(PMKManifold(img, info));
@@ -134,6 +132,7 @@
     resolve([NSError cancelledError]);
     retainCycle = nil;
 }
+
 #endif
 
 @end

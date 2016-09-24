@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
     :tag => s.version,
     :submodules => true
   }
+
   s.license = 'MIT'
   s.summary = 'Promises for Swift & ObjC.'
   s.homepage = 'http://promisekit.org'
@@ -19,6 +20,7 @@ Pod::Spec.new do |s|
   s.documentation_url = 'http://promisekit.org/docs/'
   s.default_subspecs = 'Foundation', 'UIKit', 'QuartzCore'
   s.requires_arc = true
+
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.10'
   s.watchos.deployment_target = '2.0'
@@ -26,26 +28,36 @@ Pod::Spec.new do |s|
 
   s.subspec 'Accounts' do |ss|
     ss.ios.source_files = ss.osx.source_files = 'Extensions/Accounts/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = 'Accounts'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'Accounts'
+  end
+
+  s.subspec 'Alamofire' do |ss|
+    ss.source_files = 'Extensions/Alamofire/Sources/*'
+    ss.dependency 'Alamofire', '~> 4.0'
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.ios.deployment_target = '9.0'
+    ss.osx.deployment_target = '10.11'
+    ss.watchos.deployment_target = '2.0'
+    ss.tvos.deployment_target = '9.0'
   end
 
   s.subspec 'AddressBook' do |ss|
     ss.ios.source_files = 'Extensions/AddressBook/Sources/*'
-    ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'AddressBook'
+    ss.dependency 'PromiseKit/CorePromise'
   end
 
   s.subspec 'AssetsLibrary' do |ss|
     ss.ios.source_files = 'Extensions/AssetsLibrary/Sources/*'
-    ss.dependency 'PromiseKit/UIKit'
     ss.ios.frameworks = 'AssetsLibrary'
+    ss.dependency 'PromiseKit/CorePromise'
   end
 
   s.subspec 'AVFoundation' do |ss|
     ss.ios.source_files = 'Extensions/AVFoundation/Sources/*'
-    ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'AVFoundation'
+    ss.dependency 'PromiseKit/CorePromise'
   end
 
   s.subspec 'Bolts' do |ss|
@@ -56,16 +68,14 @@ Pod::Spec.new do |s|
 
   s.subspec 'CloudKit' do |ss|
     ss.source_files = 'Extensions/CloudKit/Sources/*'
-    ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CloudKit'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.dependency 'PromiseKit/CorePromise'
   end
 
   s.subspec 'CoreBluetooth' do |ss|
-    ss.ios.source_files = ss.osx.source_files = 'Extensions/CoreBluetooth/Sources/*'
+    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/CoreBluetooth/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'CoreBluetooth'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'CoreBluetooth'
   end
 
   s.subspec 'CorePromise' do |ss|
@@ -82,110 +92,120 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CoreLocation' do |ss|
-    ss.ios.source_files = 'Extensions/CoreLocation/Sources/*'
-    ss.osx.source_files = 'Extensions/CoreLocation/Sources/*'
-    ss.watchos.source_files = Dir['*/CLGeocoder*']
+    ss.source_files = 'Extensions/CoreLocation/Sources/*'
+    ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
   end
 
   s.subspec 'EventKit' do |ss|
-    ss.ios.source_files = 'Extensions/EventKit/Sources/*'
+    ss.ios.source_files = ss.osx.source_files = ss.watchos.source_files = 'Extensions/EventKit/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = ss.watchos.frameworks = 'EventKit'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.frameworks = 'EventKit'
   end
   
   s.subspec 'Foundation' do |ss|
-    deprecated_files = Dir['Extensions/Foundation/Sources/*NSURLConnection*']
-    base_files =  Dir['Extensions/Foundation/Sources/*'] - deprecated_files
+    base_files = Dir['Extensions/Foundation/Sources/*']
     nstask_files = Dir['Extensions/Foundation/Sources/*NSTask*']
-  
-    ss.ios.source_files = base_files - nstask_files
-    ss.osx.source_files = base_files
-    ss.watchos.source_files = base_files - nstask_files
+    base_files -= nstask_files
 
-    ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'OMGHTTPURLRQ', '~> 3.2.0'
-    ss.frameworks = 'Foundation'
-    
-    ss.subspec 'Deprecated' do |sss|
-      sss.source_files = deprecated_files
-      sss.frameworks = 'Foundation'
-    end
-  end
-  
-  s.subspec 'DietFoundation' do |ss|
-    ss.ios.source_files = Dir['Extensions/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/Sources/*NSURL*']
-    ss.osx.source_files = Dir['Extensions/Foundation/*'] - Dir['Categories/Foundation/Sources/*NSURL*']
-    ss.watchos.source_files = Dir['Extensions/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/Sources/*NSURL*']
-    
+    ss.source_files = base_files
+    ss.osx.source_files = base_files + nstask_files
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
   end
-
+    
   s.subspec 'MapKit' do |ss|
-    ss.ios.source_files = 'Extensions/MapKit/Sources/*'
-    ss.osx.source_files = 'Extensions/MapKit/Sources/*'
+    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/MapKit/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
+    ss.tvos.deployment_target = '9.2'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'MapKit'
+
+    # respecify due to CocoaPods bug where specifying any
+    # deployment_target on a subspec causes all other platforms
+    # to not inherit deployment targets from their parent spec
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'MessageUI' do |ss|
-    ss.ios.source_files = 'Extensions/MessageUI/Sources/*'
-    ss.dependency 'PromiseKit/CorePromise'
+    ss.ios.source_files = 'Extensions/MessagesUI/Sources/*'
     ss.ios.frameworks = 'MessageUI'
+    ss.dependency 'PromiseKit/CorePromise'
+  end
+
+  s.subspec 'OMGHTTPURLRQ' do |ss|
+    ss.source_files = 'Extensions/OMGHTTPURLRQ/Sources/*'
+    ss.dependency 'PromiseKit/Foundation'
+    ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
   end
 
   s.subspec 'Photos' do |ss|
-    ss.ios.source_files = 'Extensions/Photos/Sources/*'
+    ss.ios.source_files = ss.tvos.source_files = 'Extensions/Photos/Sources/*'
+    ss.ios.frameworks = ss.tvos.frameworks = 'Photos'
+    ss.tvos.deployment_target = '10.0'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.frameworks = 'Photos'
+    
+    # respecify due to CocoaPods bug where specifying any
+    # deployment_target on a subspec causes all other platforms
+    # to not inherit deployment targets from their parent spec
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'QuartzCore' do |ss|
-    ss.ios.source_files = 'Extensions/QuartzCore/Sources/*'
-	ss.osx.source_files = 'Extensions/QuartzCore/Sources/*'
+    ss.osx.source_files = ss.ios.source_files = ss.tvos.source_files = 'Extensions/QuartzCore/Sources/*'
+    ss.osx.frameworks = ss.ios.frameworks = ss.tvos.frameworks = 'QuartzCore'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.frameworks = ss.osx.frameworks = 'QuartzCore'
   end
 
   s.subspec 'Social' do |ss|
     ss.ios.source_files = 'Extensions/Social/Sources/*'
-    ss.osx.source_files = Dir['Extensions/Social/*'] - ['Categories/Social/Sources/*SLComposeViewController+Promise.swift']
-    ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'Social'
+    ss.osx.source_files = Dir['Extensions/Social/Sources/*'] - ['Categories/Social/Sources/*SLComposeViewController+Promise.swift']
+    ss.ios.frameworks = ss.osx.frameworks = 'Social'
+    ss.dependency 'PromiseKit/Foundation'
   end
 
   s.subspec 'StoreKit' do |ss|
     ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/StoreKit/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'StoreKit'
   end
 
   s.subspec 'SystemConfiguration' do |ss|
-    ss.ios.source_files = ss.osx.source_files = 'Extensions/SystemConfiguration/Sources/*'
+    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/SystemConfiguration/Sources/*'
+    ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'SystemConfiguration'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'SystemConfiguration'
   end
 
+  picker_cc = 'Extensions/UIKit/Sources/UIImagePickerController+Promise.swift'
+  
   s.subspec 'UIKit' do |ss|
-    deprecated_files = Dir['Extensions/UIKit/UIActionSheet*', 'Categories/UIKit/Sources/*UIAlertView*']
-    
-    ss.ios.source_files = Dir['Extensions/UIKit/Sources/*'] - deprecated_files
+    ss.ios.source_files = ss.tvos.source_files = Dir['Extensions/UIKit/Sources/*'] - [picker_cc]
+    ss.tvos.frameworks = ss.ios.frameworks = 'UIKit'
     ss.dependency 'PromiseKit/CorePromise'
+  end
+
+  s.subspec 'UIImagePickerController' do |ss|
+    # Since iOS 10, App Store submissions that contain references to
+    # UIImagePickerController (even if unused in 3rd party libraries)
+    # are rejected unless an Info.plist key is specified, thus we
+    # moved this code to a sub-subspec.
+    #
+    # This *was* a subspec of UIKit, but bizarrely CocoaPods would
+    # include this when specifying *just* UIKit…!
+
+    ss.ios.source_files = picker_cc
     ss.ios.frameworks = 'UIKit'
-    
-    ss.subspec 'Deprecated' do |sss|
-      sss.ios.source_files = deprecated_files
-      sss.ios.frameworks = 'UIKit'
-    end
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) PMKImagePickerController=1' }
+    ss.dependency 'PromiseKit/UIKit'
   end
 
   s.subspec 'WatchConnectivity' do |ss|
-    ss.source_files = 'Extensions/WatchConnectivity/Sources/*'
+    ss.ios.source_files = ss.watchos.source_files = 'Extensions/WatchConnectivity/Sources/*'
+    ss.ios.frameworks = ss.watchos.frameworks = 'WatchConnectivity'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'WatchConnectivity'
-    ss.ios.deployment_target = '8.0' # Watch Connectivity only works in iOS 9 but apps with a deployment target of 8.0 can still include it because of the availability check
-    ss.watchos.deployment_target = '2.0'
   end
 end

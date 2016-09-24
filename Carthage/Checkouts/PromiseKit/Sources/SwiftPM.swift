@@ -3,10 +3,14 @@ public enum CatchPolicy {
     case allErrors
 }
 
-func PMKUnhandledErrorHandler(_ error: Error) {}
+func PMKUnhandledErrorHandler(_ error: Error)
+{}
 
 import class Dispatch.DispatchQueue
 
-func PMKDefaultDispatchQueue() -> DispatchQueue {
+func __PMKDefaultDispatchQueue() -> DispatchQueue {
     return DispatchQueue.main
 }
+
+func __PMKSetDefaultDispatchQueue(_: DispatchQueue)
+{}

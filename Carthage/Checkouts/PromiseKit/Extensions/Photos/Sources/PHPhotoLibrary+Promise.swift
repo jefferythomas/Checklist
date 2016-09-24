@@ -19,6 +19,6 @@ extension PHPhotoLibrary {
      - Note: This promise cannot reject.
      */
     public class func requestAuthorization() -> Promise<PHAuthorizationStatus> {
-        return Promise { fulfill, _ in PHPhotoLibrary.requestAuthorization(fulfill) }
+        return PromiseKit.wrap(PHPhotoLibrary.requestAuthorization)
     }
 }

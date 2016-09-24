@@ -32,8 +32,13 @@ import PMKFoundation
 
 ## SwiftPM
 
-It would be nice to have this module available to SwiftPM, however we depend on
-[OMGHTTPURLRQ](https://github.com/mxcl/OMGHTTPURLRQ) which is Objective-C.
+```swift
+let package = Package(
+    dependencies: [
+        .Target(url: "https://github.com/PromiseKit/Foundation", majorVersion: 1)
+    ]
+)
+```
 
 
 [Build Status]: https://travis-ci.org/PromiseKit/Foundation.svg?branch=master

@@ -56,7 +56,7 @@ public func ABAddressBookRequestAccess() -> Promise<ABAuthorizationStatus> {
  @return A promise that fulfills with the ABAddressBook instance if access was granted.
 */
 public func ABAddressBookRequestAccess() -> Promise<ABAddressBook> {
-    return ABAddressBookRequestAccess().then(on: zalgo) { (granted, book) -> Promise<ABAddressBook> in
+    return ABAddressBookRequestAccess().then(on: zalgo) { granted, book -> Promise<ABAddressBook> in
         guard granted else {
             switch ABAddressBookGetAuthorizationStatus() {
             case .notDetermined:

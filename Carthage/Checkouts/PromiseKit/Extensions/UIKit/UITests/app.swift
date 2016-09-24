@@ -6,7 +6,7 @@ import UIKit
 class App: UITableViewController, UIApplicationDelegate {
     var window: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         window!.rootViewController = self
         window!.backgroundColor = UIColor.purple
         window!.makeKeyAndVisible()
@@ -27,7 +27,16 @@ class App: UITableViewController, UIApplicationDelegate {
     let testSuceededButton = UIButton()
 
     override func viewDidLoad() {
+        testSuceededButton.setTitle("unused", for: .normal)
+        testSuceededButton.sizeToFit()
+        testSuceededButton.backgroundColor = UIColor.blue
+        testSuceededButton.isEnabled = false
+
         view.addSubview(testSuceededButton)
+    }
+
+    override func viewDidLayoutSubviews() {
+        testSuceededButton.center = view.center
     }
 
     private func success() {

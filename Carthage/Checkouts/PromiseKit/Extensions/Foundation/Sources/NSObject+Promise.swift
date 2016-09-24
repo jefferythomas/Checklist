@@ -30,8 +30,7 @@ extension NSObject {
             if let obj = obj as? T {
                 fulfill(obj)
             } else {
-                let info = [NSLocalizedDescriptionKey: "The observed property was not of the requested type."]
-                reject(NSError(domain: PMKErrorDomain, code: PMKInvalidUsageError, userInfo: info))
+                reject(PMKError.castError(T.self))
             }
         }
         proxy.retainCycle = proxy

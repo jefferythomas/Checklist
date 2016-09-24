@@ -162,7 +162,7 @@ public class LocationPromise: Promise<CLLocation> {
     private let (parentPromise, fulfill, reject) = Promise<[CLLocation]>.pending()
 
     /// Convert the promise so that all Location results are returned
-    public func allResults() -> Promise<[CLLocation]> {
+    public func asArray() -> Promise<[CLLocation]> {
         return parentPromise
     }
 

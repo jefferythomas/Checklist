@@ -1,7 +1,8 @@
-import Social
 #if !COCOAPODS
+@_exported import class PMKFoundation.URLDataPromise
 import PromiseKit
 #endif
+import Social
 
 /**
  To import the `SLRequest` category:
@@ -20,9 +21,7 @@ extension SLRequest {
      - Returns: A promise that fulfills with the response.
      - SeeAlso: `URLDataPromise`
     */
-    public func promise() -> URLDataPromise {
-        return URLDataPromise.go(preparedURLRequest()) { completionHandler in
-            perform(handler: completionHandler)
-        }
+    public func perform() -> URLDataPromise {
+        return URLDataPromise.go(preparedURLRequest(), body: perform)
     }
 }

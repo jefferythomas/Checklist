@@ -15,7 +15,7 @@ class SLRequestTests: XCTestCase {
             let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .GET, url: url, parameters: params)!
 
             let ex = expectation(description: "")
-            rq.promise().then { x -> Void in
+            rq.perform().then { x -> Void in
                 XCTAssertEqual(x, Data())
                 ex.fulfill()
             }

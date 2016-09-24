@@ -15,7 +15,7 @@ import PromiseKit
 */
 extension CLGeocoder {
     /// Submits a reverse-geocoding request for the specified location.
-    public func reverseGeocodeLocation(_ location: CLLocation) -> PlacemarkPromise {
+    public func reverseGeocode(location: CLLocation) -> PlacemarkPromise {
         return PlacemarkPromise.go { resolve in
             reverseGeocodeLocation(location, completionHandler: resolve)
         }
@@ -43,7 +43,7 @@ extension CLGeocoder {
     }
 }
 
-// Xcode 8 beta 4 doesn't import CLError as Swift.Error
+// Xcode 8 beta 6 doesn't import CLError as Swift.Error
 //extension CLError: CancellableError {
 //    public var isCancelled: Bool {
 //        return self == .geocodeCanceled
@@ -54,7 +54,7 @@ extension CLGeocoder {
 public class PlacemarkPromise: Promise<CLPlacemark> {
 
     /// Returns all CLPlacemarks rather than just the first
-    public func allResults() -> Promise<[CLPlacemark]> {
+    public func asArray() -> Promise<[CLPlacemark]> {
         return then(on: zalgo) { _ in return self.placemarks }
     }
 

@@ -7,24 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6352FDE31D69130200680F48 /* URLDataPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6352FDE21D69130200680F48 /* URLDataPromise.swift */; };
+		6364F66F1D68B8DF008D7B94 /* NSNotificationCenter+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 6364F66C1D68B8DF008D7B94 /* NSNotificationCenter+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6364F6701D68B8DF008D7B94 /* NSTask+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 6364F66D1D68B8DF008D7B94 /* NSTask+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6364F6711D68B8DF008D7B94 /* NSURLSession+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 6364F66E1D68B8DF008D7B94 /* NSURLSession+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C700031D5C021F003BAE60 /* TestNSNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFFD1D5C021F003BAE60 /* TestNSNotificationCenter.swift */; };
 		63C700041D5C021F003BAE60 /* TestNSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFFE1D5C021F003BAE60 /* TestNSObject.swift */; };
 		63C700051D5C021F003BAE60 /* TestNSTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFFF1D5C021F003BAE60 /* TestNSTask.swift */; };
-		63C700061D5C021F003BAE60 /* TestNSURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C700001D5C021F003BAE60 /* TestNSURLConnection.m */; };
-		63C700071D5C021F003BAE60 /* TestNSURLConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C700011D5C021F003BAE60 /* TestNSURLConnection.swift */; };
 		63C700081D5C021F003BAE60 /* TestNSURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C700021D5C021F003BAE60 /* TestNSURLSession.swift */; };
 		63C7FFDC1D5C00F2003BAE60 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFCE1D5C00F2003BAE60 /* afterlife.swift */; };
 		63C7FFDE1D5C00F2003BAE60 /* NSNotificationCenter+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD01D5C00F2003BAE60 /* NSNotificationCenter+AnyPromise.m */; };
 		63C7FFDF1D5C00F2003BAE60 /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD11D5C00F2003BAE60 /* NSNotificationCenter+Promise.swift */; };
 		63C7FFE01D5C00F2003BAE60 /* NSObject+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD21D5C00F2003BAE60 /* NSObject+Promise.swift */; };
 		63C7FFE21D5C00F2003BAE60 /* NSTask+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD41D5C00F2003BAE60 /* NSTask+AnyPromise.m */; };
-		63C7FFE31D5C00F2003BAE60 /* NSTask+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD51D5C00F2003BAE60 /* NSTask+Promise.swift */; };
-		63C7FFE51D5C00F2003BAE60 /* NSURLConnection+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD71D5C00F2003BAE60 /* NSURLConnection+AnyPromise.m */; };
-		63C7FFE61D5C00F2003BAE60 /* NSURLConnection+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD81D5C00F2003BAE60 /* NSURLConnection+Promise.swift */; };
+		63C7FFE31D5C00F2003BAE60 /* Process+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFD51D5C00F2003BAE60 /* Process+Promise.swift */; };
 		63C7FFE81D5C00F2003BAE60 /* NSURLSession+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFDA1D5C00F2003BAE60 /* NSURLSession+AnyPromise.m */; };
 		63C7FFE91D5C00F2003BAE60 /* NSURLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7FFDB1D5C00F2003BAE60 /* NSURLSession+Promise.swift */; };
 		63C7FFED1D5C00FD003BAE60 /* PMKFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 63C7FFEB1D5C00FD003BAE60 /* PMKFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C7FFF71D5C020D003BAE60 /* PMKFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C7FFA71D5BEE09003BAE60 /* PMKFoundation.framework */; };
+		63CAF1061D682F9600D3835B /* TestNSURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAF1051D682F9600D3835B /* TestNSURLSession.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		63C700001D5C021F003BAE60 /* TestNSURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestNSURLConnection.m; path = Tests/TestNSURLConnection.m; sourceTree = SOURCE_ROOT; };
-		63C700011D5C021F003BAE60 /* TestNSURLConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestNSURLConnection.swift; path = Tests/TestNSURLConnection.swift; sourceTree = SOURCE_ROOT; };
+		6352FDE21D69130200680F48 /* URLDataPromise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLDataPromise.swift; path = Sources/URLDataPromise.swift; sourceTree = SOURCE_ROOT; };
+		6364F66C1D68B8DF008D7B94 /* NSNotificationCenter+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+AnyPromise.h"; path = "Sources/NSNotificationCenter+AnyPromise.h"; sourceTree = SOURCE_ROOT; };
+		6364F66D1D68B8DF008D7B94 /* NSTask+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTask+AnyPromise.h"; path = "Sources/NSTask+AnyPromise.h"; sourceTree = SOURCE_ROOT; };
+		6364F66E1D68B8DF008D7B94 /* NSURLSession+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLSession+AnyPromise.h"; path = "Sources/NSURLSession+AnyPromise.h"; sourceTree = SOURCE_ROOT; };
 		63C700021D5C021F003BAE60 /* TestNSURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestNSURLSession.swift; path = Tests/TestNSURLSession.swift; sourceTree = SOURCE_ROOT; };
 		63C700091D5C0253003BAE60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63C7FFA71D5BEE09003BAE60 /* PMKFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PMKFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,9 +51,7 @@
 		63C7FFD11D5C00F2003BAE60 /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Sources/NSNotificationCenter+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63C7FFD21D5C00F2003BAE60 /* NSObject+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSObject+Promise.swift"; path = "Sources/NSObject+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63C7FFD41D5C00F2003BAE60 /* NSTask+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTask+AnyPromise.m"; path = "Sources/NSTask+AnyPromise.m"; sourceTree = SOURCE_ROOT; };
-		63C7FFD51D5C00F2003BAE60 /* NSTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSTask+Promise.swift"; path = "Sources/NSTask+Promise.swift"; sourceTree = SOURCE_ROOT; };
-		63C7FFD71D5C00F2003BAE60 /* NSURLConnection+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+AnyPromise.m"; path = "Sources/NSURLConnection+AnyPromise.m"; sourceTree = SOURCE_ROOT; };
-		63C7FFD81D5C00F2003BAE60 /* NSURLConnection+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.swift"; path = "Sources/NSURLConnection+Promise.swift"; sourceTree = SOURCE_ROOT; };
+		63C7FFD51D5C00F2003BAE60 /* Process+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Process+Promise.swift"; path = "Sources/Process+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63C7FFDA1D5C00F2003BAE60 /* NSURLSession+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLSession+AnyPromise.m"; path = "Sources/NSURLSession+AnyPromise.m"; sourceTree = SOURCE_ROOT; };
 		63C7FFDB1D5C00F2003BAE60 /* NSURLSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLSession+Promise.swift"; path = "Sources/NSURLSession+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63C7FFEB1D5C00FD003BAE60 /* PMKFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMKFoundation.h; path = Sources/PMKFoundation.h; sourceTree = SOURCE_ROOT; };
@@ -58,6 +59,7 @@
 		63C7FFFD1D5C021F003BAE60 /* TestNSNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestNSNotificationCenter.swift; path = Tests/TestNSNotificationCenter.swift; sourceTree = SOURCE_ROOT; };
 		63C7FFFE1D5C021F003BAE60 /* TestNSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestNSObject.swift; path = Tests/TestNSObject.swift; sourceTree = SOURCE_ROOT; };
 		63C7FFFF1D5C021F003BAE60 /* TestNSTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestNSTask.swift; path = Tests/TestNSTask.swift; sourceTree = SOURCE_ROOT; };
+		63CAF1051D682F9600D3835B /* TestNSURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestNSURLSession.m; path = Tests/TestNSURLSession.m; sourceTree = SOURCE_ROOT; };
 		63CCF8121D5C0C4E00503216 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		63CCF8131D5C0C4E00503216 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
 		63CCF8171D5C11B500503216 /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
@@ -108,16 +110,18 @@
 			isa = PBXGroup;
 			children = (
 				63C7FFCE1D5C00F2003BAE60 /* afterlife.swift */,
+				63C7FFD51D5C00F2003BAE60 /* Process+Promise.swift */,
+				6364F66C1D68B8DF008D7B94 /* NSNotificationCenter+AnyPromise.h */,
 				63C7FFD01D5C00F2003BAE60 /* NSNotificationCenter+AnyPromise.m */,
 				63C7FFD11D5C00F2003BAE60 /* NSNotificationCenter+Promise.swift */,
 				63C7FFD21D5C00F2003BAE60 /* NSObject+Promise.swift */,
+				6364F66D1D68B8DF008D7B94 /* NSTask+AnyPromise.h */,
 				63C7FFD41D5C00F2003BAE60 /* NSTask+AnyPromise.m */,
-				63C7FFD51D5C00F2003BAE60 /* NSTask+Promise.swift */,
-				63C7FFD71D5C00F2003BAE60 /* NSURLConnection+AnyPromise.m */,
-				63C7FFD81D5C00F2003BAE60 /* NSURLConnection+Promise.swift */,
+				6364F66E1D68B8DF008D7B94 /* NSURLSession+AnyPromise.h */,
 				63C7FFDA1D5C00F2003BAE60 /* NSURLSession+AnyPromise.m */,
 				63C7FFDB1D5C00F2003BAE60 /* NSURLSession+Promise.swift */,
 				63C7FFEB1D5C00FD003BAE60 /* PMKFoundation.h */,
+				6352FDE21D69130200680F48 /* URLDataPromise.swift */,
 			);
 			name = Sources;
 			path = "PMK+UIKit";
@@ -129,9 +133,8 @@
 				63C7FFFD1D5C021F003BAE60 /* TestNSNotificationCenter.swift */,
 				63C7FFFE1D5C021F003BAE60 /* TestNSObject.swift */,
 				63C7FFFF1D5C021F003BAE60 /* TestNSTask.swift */,
-				63C700001D5C021F003BAE60 /* TestNSURLConnection.m */,
-				63C700011D5C021F003BAE60 /* TestNSURLConnection.swift */,
 				63C700021D5C021F003BAE60 /* TestNSURLSession.swift */,
+				63CAF1051D682F9600D3835B /* TestNSURLSession.m */,
 			);
 			name = Tests;
 			path = PMKTests/NS;
@@ -145,6 +148,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C7FFED1D5C00FD003BAE60 /* PMKFoundation.h in Headers */,
+				6364F66F1D68B8DF008D7B94 /* NSNotificationCenter+AnyPromise.h in Headers */,
+				6364F6711D68B8DF008D7B94 /* NSURLSession+AnyPromise.h in Headers */,
+				6364F6701D68B8DF008D7B94 /* NSTask+AnyPromise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +240,6 @@
 			);
 			inputPaths = (
 				PromiseKit,
-				OMGHTTPURLRQ,
 				OHHTTPStubs,
 			);
 			name = "Embed Carthage Frameworks";
@@ -251,15 +256,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6352FDE31D69130200680F48 /* URLDataPromise.swift in Sources */,
 				63C7FFDF1D5C00F2003BAE60 /* NSNotificationCenter+Promise.swift in Sources */,
 				63C7FFDC1D5C00F2003BAE60 /* afterlife.swift in Sources */,
 				63C7FFDE1D5C00F2003BAE60 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				63C7FFE91D5C00F2003BAE60 /* NSURLSession+Promise.swift in Sources */,
-				63C7FFE31D5C00F2003BAE60 /* NSTask+Promise.swift in Sources */,
+				63C7FFE31D5C00F2003BAE60 /* Process+Promise.swift in Sources */,
 				63C7FFE01D5C00F2003BAE60 /* NSObject+Promise.swift in Sources */,
 				63C7FFE81D5C00F2003BAE60 /* NSURLSession+AnyPromise.m in Sources */,
-				63C7FFE51D5C00F2003BAE60 /* NSURLConnection+AnyPromise.m in Sources */,
-				63C7FFE61D5C00F2003BAE60 /* NSURLConnection+Promise.swift in Sources */,
 				63C7FFE21D5C00F2003BAE60 /* NSTask+AnyPromise.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,11 +272,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63C700061D5C021F003BAE60 /* TestNSURLConnection.m in Sources */,
 				63C700051D5C021F003BAE60 /* TestNSTask.swift in Sources */,
 				63C700031D5C021F003BAE60 /* TestNSNotificationCenter.swift in Sources */,
 				63C700081D5C021F003BAE60 /* TestNSURLSession.swift in Sources */,
-				63C700071D5C021F003BAE60 /* TestNSURLConnection.swift in Sources */,
+				63CAF1061D682F9600D3835B /* TestNSURLSession.m in Sources */,
 				63C700041D5C021F003BAE60 /* TestNSObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

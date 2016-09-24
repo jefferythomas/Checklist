@@ -7,6 +7,11 @@
 #import <PromiseKit/PromiseKit.h>
 #import "SLRequest+AnyPromise.h"
 
+#if COCOAPODS
+#import "NSURLSession+AnyPromise.h"
+#else
+#import <PMKFoundation/NSURLSession+AnyPromise.h>
+#endif
 
 @implementation SLRequest (PromiseKit)
 

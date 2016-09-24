@@ -6,23 +6,20 @@
 //  Copyright © 2016 Max Howell. All rights reserved.
 //
 
-import CoreFoundation
-import Foundation.NSError
 import EventKit
-
 #if !COCOAPODS
-    import PromiseKit
+import PromiseKit
 #endif
 
 /// Errors representing PromiseKit EventKit failures
-public enum EventKitError: Error {
+public enum EventKitError: Error, CustomStringConvertible {
     /// Access to the EKEventStore is restricted
     case restricted
     /// Access to the EKEventStore is denied
     case denied
 
     /// A textual description of the EKEventStore error
-    public var localizedDescription: String {
+    public var description: String {
         switch self {
         case .restricted:
             return "A head of family must grant calendar access."
@@ -58,9 +55,11 @@ public func EKEventStoreRequestAccess() -> Promise<EKEventStore> {
         case .restricted:
             reject(EventKitError.restricted)
         case .notDetermined:
-            eventStore.requestAccess(to: EKEntityType.event) { granted, error in
+            eventStore.requestAccess(to: .event) { granted, error in
                 if granted {
                     fulfill(eventStore)
+                } else if let error = error {
+                    reject(error)
                 } else {
                     reject(EventKitError.denied)
                 }

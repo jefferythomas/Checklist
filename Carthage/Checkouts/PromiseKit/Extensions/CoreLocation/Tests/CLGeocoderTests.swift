@@ -14,7 +14,7 @@ class CLGeocoderTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        MockGeocoder().reverseGeocodeLocation(CLLocation()).then { x -> Void in
+        MockGeocoder().reverseGeocode(location: CLLocation()).then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
