@@ -10,6 +10,7 @@ import Foundation
 import Decodable
 
 struct Checklist {
+    var id: String
     var title: String
     var items: [ChecklistItem]
 }
@@ -17,6 +18,7 @@ struct Checklist {
 extension Checklist: Decodable {
     static func decode(_ json: Any) throws -> Checklist {
         return try self.init(
+            id: json => "id",
             title: json => "title",
             items: json => "items"
         )
@@ -25,6 +27,6 @@ extension Checklist: Decodable {
 
 extension Checklist: JSONEncodable {
     func JSONEncode() throws -> Any {
-        return ["title": title, "items": try items.JSONEncode()]
+        return ["id": id, "title": title, "items": try items.JSONEncode()]
     }
 }

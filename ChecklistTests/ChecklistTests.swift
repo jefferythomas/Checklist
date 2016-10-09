@@ -11,14 +11,17 @@ import PromiseKit
 @testable import Checklist
 
 class ChecklistTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    let dataSource: ChecklistDataSource = {
+        let dataSource = ChecklistDataSource()
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+        let path = "/tmp/ChecklistTests\(UUID().uuidString)/"
+        dataSource.baseUrl = URL(fileURLWithPath: path, isDirectory: true)
+
+        return dataSource
+    }()
+
+    deinit {
+        try? dataSource.fileManager.removeItem(at: dataSource.baseUrl)
     }
 
     func testChecklistItemInitWithChecked() {
@@ -57,14 +60,15 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistInit() {
-        let checklist = Checklist(title: "test", items: [])
+        let checklist = Checklist(id: "id", title: "test", items: [])
 
+        XCTAssertEqual(checklist.id, "id")
         XCTAssertEqual(checklist.title, "test")
         XCTAssertEqual(checklist.items, [])
     }
 
     func testChecklistChecked() {
-        var checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: false)])
+        var checklist = Checklist(id: "id", title: "test", items: [ChecklistItem(title: "test", checked: false)])
 
         XCTAssertEqual(checklist.items.count, 1)
         XCTAssertEqual(checklist.items[0].checked, false)
@@ -73,7 +77,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistDecode() {
-        let json: [String: Any] = ["title": "test", "items": [["title": "test", "checked": true]]]
+        let json: [String: Any] = ["id": "id", "title": "test", "items": [["title": "test", "checked": true]]]
 
         let checklist = try? Checklist.decode(json)
 
@@ -82,7 +86,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistEncode() {
-        let checklist = Checklist(title: "test", items: [ChecklistItem(title: "test", checked: true)])
+        let checklist = Checklist(id: "id", title: "test", items: [ChecklistItem(title: "test", checked: true)])
 
         let json = try? checklist.JSONEncode()
 
@@ -96,100 +100,114 @@ class ChecklistTests: XCTestCase {
         XCTAssertEqual(firstItemChecked, true)
     }
 
-    func testChecklistDataSourceURLForIdentifier() {
-        let dataSource = ChecklistDataSource()
-
-        let URL = try? dataSource.URLForIdentifier("test")
-
-        XCTAssertEqual(URL?.lastPathComponent, "test.json")
+    func testDataSet() {
+        let dataSet = DataSet(items: ["a", "b", "c"])
+        XCTAssertEqual(dataSet.items, ["a", "b", "c"])
     }
 
-    func testChecklistDataSourceURLForIdentifierWithSpecialCharacters() {
-        let dataSource = ChecklistDataSource()
+    func testDataSetSortItems() {
+        let dataSet = DataSet(items: ["a", "b", "c"])
+        XCTAssertEqual(dataSet.items, ["a", "b", "c"])
 
-        let URL = try? dataSource.URLForIdentifier("test test./")
-
-        XCTAssertEqual(URL?.lastPathComponent, "test%20test%2E%2F.json")
+        dataSet.items.sort(by: >)
+        XCTAssertEqual(dataSet.items, ["c", "b", "a"])
     }
 
-    func testChecklistDataSourceStore() {
-        let ex = expectation(description: "testChecklistDataSourceStore")
+    func testDataSetResetItems() {
+        let dataSet = DataSet(items: ["a", "b", "c"])
+        XCTAssertEqual(dataSet.items, ["a", "b", "c"])
 
-        let UUID = NSUUID().uuidString
-        let checklist = Checklist(title: "test", items: [])
-        let dataSet = ChecklistDataSet(identifier: UUID, checklists: [checklist])
+        dataSet.items.sort(by: >)
+        XCTAssertEqual(dataSet.items, ["c", "b", "a"])
 
-        let dataSource = ChecklistDataSource()
+        dataSet.reset()
+        XCTAssertEqual(dataSet.items, ["a", "b", "c"])
+    }
+
+    func testChecklistDataSourceUrlForId() {
+        let url = dataSource.url(forId: "test")
+
+        XCTAssertEqual(url.lastPathComponent, "test.json")
+    }
+
+    func testChecklistDataSourceCreateAndDelete() {
+        let ex = expectation(description: "testChecklistDataSourceCreateAndDelete")
+        let id = NSUUID().uuidString
 
         firstly {
-            return dataSource.updateChecklists(dataSet)
-        } .then { dataSet -> () in
-            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
-
-            XCTAssertEqual(dataSet.checklists.count, 1)
-            XCTAssertEqual(dataSet.checklists.first?.title, "test")
-
-            XCTAssertTrue(dataSource.fileManager.fileExists(atPath: URL.path))
-            try dataSource.fileManager.removeItem(at: URL)
-            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
-        } .always {
+            self._createChecklist(id: id, in: self.dataSource)
+        } .then { _ in
+            XCTAssertTrue(self._hasChecklist(id: id, in: self.dataSource))
+        } .then {
+            self._deleteChecklist(id: id, in: self.dataSource)
+        } .then { _ in
+            XCTAssertFalse(self._hasChecklist(id: id, in: self.dataSource))
+        } .then {
             ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
-    func testChecklistDataSourceFetch() {
-        let ex = expectation(description: "testChecklistDataSourceFetch")
-
-        let checklist = Checklist(title: "test", items: [])
-        let dataSet = ChecklistDataSet(identifier: NSUUID().uuidString, checklists: [checklist])
-        let dataSource = ChecklistDataSource()
+    func testChecklistDataSourceFetchChecklist() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklist")
+        let id = NSUUID().uuidString
 
         firstly {
-            return dataSource.updateChecklists(dataSet)
+            self._createChecklist(id: id, in: self.dataSource)
+        } .then { _ in
+            self.dataSource.fetchChecklist(id: id)
         } .then { dataSet in
-            return dataSource.fetchChecklistsWithIdentifier(dataSet.identifier)
-        } .then { dataSet -> () in
-            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
-
-            XCTAssertEqual(dataSet.checklists.count, 1)
-            XCTAssertEqual(dataSet.checklists.first?.title, "test")
-
-            XCTAssertTrue(dataSource.fileManager.fileExists(atPath: URL.path))
-            try dataSource.fileManager.removeItem(at: URL)
-            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
-        } .always {
+            XCTAssertEqual(dataSet.items.first?.id, id)
+        } .then {
+            self._deleteChecklist(id: id, in: self.dataSource)
+        } .then { _ in
             ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
-    func testChecklistDataSourceFetchCreate() {
-        let ex = expectation(description: "testChecklistDataSourceFetchCreate")
-
-        let dataSource = ChecklistDataSource()
+    func testChecklistDataSourceFetchChecklists() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklists")
+        let id = NSUUID().uuidString
 
         firstly {
-            return dataSource.fetchChecklistsWithIdentifier(NSUUID().uuidString)
-        } .then { dataSet -> () in
-            let URL = try dataSource.URLForIdentifier(dataSet.identifier)
-
-            XCTAssertEqual(dataSet.checklists.count, 0)
-
-            XCTAssertFalse(dataSource.fileManager.fileExists(atPath: URL.path))
-        } .always {
+            self._createChecklist(id: id, in: self.dataSource)
+        } .then { _ in
+            self.dataSource.fetchChecklists()
+        } .then { dataSet in
+            XCTAssertTrue(dataSet.items.contains { checklist in checklist.id == id })
+        } .then {
+            self._deleteChecklist(id: id, in: self.dataSource)
+        } .then { _ in
             ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+            ex.fulfill()
         }
-        
+
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    // MARK: Private
+
+    private func _createChecklist(id: String, in dataSource: ChecklistDataSource) -> ChecklistDataSetPromise {
+        return dataSource.updateChecklists(DataSet(items: [Checklist(id: id, title: id, items: [])]))
+    }
+
+    private func _deleteChecklist(id: String, in dataSource: ChecklistDataSource) -> ChecklistDataSetPromise {
+        return dataSource.deleteChecklist(id: id)
+    }
+
+    private func _hasChecklist(id: String, in dataSource: ChecklistDataSource) -> Bool {
+        return dataSource.fileManager.fileExists(atPath: dataSource.url(forId: id).path)
     }
 
 }

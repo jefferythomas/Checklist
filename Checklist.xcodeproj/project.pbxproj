@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B4A55831DA9ED2700A55E2A /* DataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A55821DA9ED2700A55E2A /* DataSet.swift */; };
 		7B4F035D1D09022E00668867 /* JSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4F035C1D09022E00668867 /* JSONEncodable.swift */; };
 		7B72C5BC1CFE78FD006E9923 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */; };
-		7B72C5BF1D01911D006E9923 /* ChecklistDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */; };
 		7B75C5951CE960140047AACF /* Checklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5941CE960140047AACF /* Checklist.swift */; };
 		7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5961CE960EE0047AACF /* ChecklistItem.swift */; };
 		7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */; };
@@ -44,9 +44,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B4A55821DA9ED2700A55E2A /* DataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSet.swift; sourceTree = "<group>"; };
 		7B4F035C1D09022E00668867 /* JSONEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncodable.swift; sourceTree = "<group>"; };
 		7B72C5BA1CFE78FD006E9923 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
-		7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDataSet.swift; sourceTree = "<group>"; };
 		7B75C5941CE960140047AACF /* Checklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checklist.swift; sourceTree = "<group>"; };
 		7B75C5961CE960EE0047AACF /* ChecklistItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
 		7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDataSource.swift; sourceTree = "<group>"; };
@@ -96,13 +96,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7B4F035A1D09021200668867 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 		7B4F035B1D09021200668867 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +110,7 @@
 				7B75C5941CE960140047AACF /* Checklist.swift */,
 				7B75C5961CE960EE0047AACF /* ChecklistItem.swift */,
 				7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */,
-				7B72C5BE1D01911D006E9923 /* ChecklistDataSet.swift */,
+				7B4A55821DA9ED2700A55E2A /* DataSet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -155,7 +148,6 @@
 		7BB76A8C1CE7B43500D05C9C /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
-				7B4F035A1D09021200668867 /* Extension */,
 				7B75C5931CE95FDC0047AACF /* Models */,
 				7B4F035B1D09021200668867 /* Protocols */,
 				7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */,
@@ -357,7 +349,7 @@
 			files = (
 				7B75C5951CE960140047AACF /* Checklist.swift in Sources */,
 				7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */,
-				7B72C5BF1D01911D006E9923 /* ChecklistDataSet.swift in Sources */,
+				7B4A55831DA9ED2700A55E2A /* DataSet.swift in Sources */,
 				7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */,
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
 				7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */,
