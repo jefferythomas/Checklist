@@ -12,6 +12,11 @@ import Decodable
 struct ChecklistItem {
     var title: String
     var checked: Bool
+
+    init(title: String, checked: Bool = false) {
+        self.title = title
+        self.checked = checked
+    }
 }
 
 extension ChecklistItem: Equatable { }

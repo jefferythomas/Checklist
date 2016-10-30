@@ -14,44 +14,41 @@ typealias ChecklistDataSet = DataSet<Checklist>
 typealias ChecklistDataSetPromise = Promise<ChecklistDataSet>
 
 class ChecklistDataSource {
-    lazy var fileManager = FileManager.default
+    // MARK: Data source API
 
-    var baseUrl: URL {
-        get {
-            if _baseUrl == nil { _baseUrl = _ensureDirectory(_defaultBaseUrl()) }
-            return _baseUrl!
-        }
+    func create() -> ChecklistDataSetPromise {
+        return create(id: uniqueId())
+    }
 
-        set {
-            _baseUrl = _ensureDirectory(newValue)
+    func create(id: String) -> ChecklistDataSetPromise {
+        return DispatchQueue.main.promise { () -> ChecklistDataSet in
+            let checklist = Checklist(id: id)
+
+            return DataSet(items: [checklist])
+        }.then {
+            return self.update(dataSet: $0)
         }
     }
 
-    func url(forId id: String) -> URL {
-        return baseUrl.appendingPathComponent(id).appendingPathExtension("json")
-    }
+    func fetch(_ fetchable: ChecklistFetchable) -> ChecklistDataSetPromise {
+        if fetchable.idsToFetch.count > 0, fetchable.titlesToFetch.count == 0 {
+            return _specializedFetchUsingOnlyIds(fetchable.idsToFetch)
+        }
 
-    func fetchChecklists() -> ChecklistDataSetPromise {
+        let isIncluded = _filterClosureForChecklist(fetchable: fetchable)
+
         return DispatchQueue.main.promise { () -> ChecklistDataSet in
             let enumerator = self.fileManager.enumerator(at: self.baseUrl, includingPropertiesForKeys: [])!
 
             let items = try enumerator.allObjects.map { url in
                 return try Checklist._from(fileUrl: url as! URL)
-            }
+            }.filter(isIncluded)
 
             return DataSet(items: items)
         }
     }
 
-    func fetchChecklist(id: String) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
-            let checklist = try Checklist._from(fileUrl: self.url(forId: id))
-
-            return DataSet(items: [checklist])
-        }
-    }
-
-    func updateChecklists(_ dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
+    func update(dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
         return DispatchQueue.main.promise {
             for checklist in dataSet.items {
                 let url = self.url(forId: checklist.id)
@@ -65,14 +62,37 @@ class ChecklistDataSource {
         }
     }
 
-    func deleteChecklist(id: String) -> ChecklistDataSetPromise {
+    func delete(id: String) -> ChecklistDataSetPromise {
         return DispatchQueue.main.promise { () -> ChecklistDataSet in
             let url = self.url(forId: id)
             let checklist = try Checklist._from(fileUrl: url)
             try self.fileManager.removeItem(at: url)
-
+            
             return DataSet(items: [checklist])
         }
+    }
+
+    // MARK: Auxlilary methods
+
+    lazy var fileManager = FileManager.default
+
+    var baseUrl: URL {
+        get {
+            if _baseUrl == nil { _baseUrl = _ensureDirectory(_defaultBaseUrl()) }
+            return _baseUrl!
+        }
+
+        set {
+            _baseUrl = _ensureDirectory(newValue)
+        }
+    }
+    
+    func url(forId id: String) -> URL {
+        return baseUrl.appendingPathComponent(id).appendingPathExtension("json")
+    }
+
+    func uniqueId() -> String {
+        return NSUUID().uuidString
     }
 
     // MARK: Private
@@ -94,9 +114,46 @@ class ChecklistDataSource {
 
         return url
     }
+
+    private func _specializedFetchUsingOnlyIds(_ ids: [String]) -> ChecklistDataSetPromise {
+        return DispatchQueue.main.promise { () -> ChecklistDataSet in
+            let checklists = try ids.map { id in try Checklist._from(fileUrl: self.url(forId: id)) }
+
+            return DataSet(items: checklists)
+        }
+    }
+
+    private func _filterClosureForChecklist(fetchable: ChecklistFetchable) -> (Checklist) -> Bool {
+        let ids = fetchable.idsToFetch
+        let titles = fetchable.titlesToFetch
+
+        if ids.count > 0 && titles.count > 0 {
+            return { checklist in ids.contains(checklist.id) && titles.contains(checklist.title) }
+        } else if ids.count > 0 {
+            return { checklist in ids.contains(checklist.id) }
+        } else if titles.count > 0 {
+            return { checklist in titles.contains(checklist.title) }
+        } else {
+            return { _ in true }
+        }
+    }
 }
 
-private extension Checklist {
+extension ChecklistDataSource {
+    // The default implementation of ChecklistFetchable
+    struct Criteria: ChecklistFetchable {
+        let idsToFetch: [String]
+        let titlesToFetch: [String]
+
+        init(ids: [String] = [], titles: [String] = []) {
+            idsToFetch = ids
+            titlesToFetch = titles
+        }
+    }
+}
+
+fileprivate extension Checklist {
+    // Deserialze a checklist from a file URL.
     static func _from(fileUrl: URL) throws -> Checklist {
         let data = try Data(contentsOf: fileUrl)
         let json = try JSONSerialization.jsonObject(with: data)

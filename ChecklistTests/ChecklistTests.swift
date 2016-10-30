@@ -24,7 +24,14 @@ class ChecklistTests: XCTestCase {
         try? dataSource.fileManager.removeItem(at: dataSource.baseUrl)
     }
 
-    func testChecklistItemInitWithChecked() {
+    func testChecklistItemInitWithTitle() {
+        let item = ChecklistItem(title: "test")
+
+        XCTAssertEqual(item.title, "test")
+        XCTAssertEqual(item.checked, false)
+    }
+
+    func testChecklistItemInitWithTitleChecked() {
         let item = ChecklistItem(title: "test", checked: true)
 
         XCTAssertEqual(item.title, "test")
@@ -48,7 +55,7 @@ class ChecklistTests: XCTestCase {
     }
 
     func testChecklistItemEncode() {
-        let item = ChecklistItem(title: "test", checked: false)
+        let item = ChecklistItem(title: "test")
 
         let json = try? item.JSONEncode()
 
@@ -59,16 +66,40 @@ class ChecklistTests: XCTestCase {
         XCTAssertEqual(checked, false)
     }
 
-    func testChecklistInit() {
-        let checklist = Checklist(id: "id", title: "test", items: [])
+    func testChecklistInitWithId() {
+        let checklist = Checklist(id: "id")
+
+        XCTAssertEqual(checklist.id, "id")
+        XCTAssertEqual(checklist.title, "")
+        XCTAssertEqual(checklist.items, [])
+    }
+
+    func testChecklistInitWithIdTitle() {
+        let checklist = Checklist(id: "id", title: "test")
 
         XCTAssertEqual(checklist.id, "id")
         XCTAssertEqual(checklist.title, "test")
         XCTAssertEqual(checklist.items, [])
     }
 
+    func testChecklistInitIdItems() {
+        let checklist = Checklist(id: "id", items: [ChecklistItem(title: "test")])
+
+        XCTAssertEqual(checklist.id, "id")
+        XCTAssertEqual(checklist.title, "")
+        XCTAssertEqual(checklist.items, [ChecklistItem(title: "test")])
+    }
+
+    func testChecklistInitIdTitleItems() {
+        let checklist = Checklist(id: "id", title: "test", items: [ChecklistItem(title: "test")])
+
+        XCTAssertEqual(checklist.id, "id")
+        XCTAssertEqual(checklist.title, "test")
+        XCTAssertEqual(checklist.items, [ChecklistItem(title: "test")])
+    }
+
     func testChecklistChecked() {
-        var checklist = Checklist(id: "id", title: "test", items: [ChecklistItem(title: "test", checked: false)])
+        var checklist = Checklist(id: "id", title: "test", items: [ChecklistItem(title: "test")])
 
         XCTAssertEqual(checklist.items.count, 1)
         XCTAssertEqual(checklist.items[0].checked, false)
@@ -135,11 +166,11 @@ class ChecklistTests: XCTestCase {
         let id = NSUUID().uuidString
 
         firstly {
-            self._createChecklist(id: id, in: self.dataSource)
+            self.dataSource.create(id: id)
         } .then { _ in
             XCTAssertTrue(self._hasChecklist(id: id, in: self.dataSource))
         } .then {
-            self._deleteChecklist(id: id, in: self.dataSource)
+            self.dataSource.delete(id: id)
         } .then { _ in
             XCTAssertFalse(self._hasChecklist(id: id, in: self.dataSource))
         } .then {
@@ -152,18 +183,90 @@ class ChecklistTests: XCTestCase {
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
-    func testChecklistDataSourceFetchChecklist() {
-        let ex = expectation(description: "testChecklistDataSourceFetchChecklist")
+    func testChecklistDataSourceFetchChecklistById() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklistById")
         let id = NSUUID().uuidString
 
         firstly {
-            self._createChecklist(id: id, in: self.dataSource)
+            self.dataSource.create(id: id)
         } .then { _ in
-            self.dataSource.fetchChecklist(id: id)
+            self.dataSource.fetch(ChecklistDataSource.Criteria(ids: [id]))
         } .then { dataSet in
             XCTAssertEqual(dataSet.items.first?.id, id)
         } .then {
-            self._deleteChecklist(id: id, in: self.dataSource)
+            self.dataSource.delete(id: id)
+        } .then { _ in
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testChecklistDataSourceFetchChecklistByTitle() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklistByTitle")
+        let id = NSUUID().uuidString
+
+        firstly {
+            self.dataSource.create(id: id)
+        } .then { dataSet -> ChecklistDataSetPromise in
+            dataSet.items[0].title = "test"
+            return self.dataSource.update(dataSet: dataSet)
+        } .then { _ in
+            self.dataSource.fetch(ChecklistDataSource.Criteria(titles: ["test"]))
+        } .then { dataSet in
+            XCTAssertEqual(dataSet.items.first?.title, "test")
+        } .then {
+            self.dataSource.delete(id: id)
+        } .then { _ in
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testChecklistDataSourceFetchChecklistByIdTitle() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklistByIdTitle")
+        let id = NSUUID().uuidString
+
+        firstly {
+            self.dataSource.create(id: id)
+        } .then { dataSet -> ChecklistDataSetPromise in
+            dataSet.items[0].title = "test"
+            return self.dataSource.update(dataSet: dataSet)
+        } .then { _ in
+            self.dataSource.fetch(ChecklistDataSource.Criteria(ids: [id], titles: ["test"]))
+        } .then { dataSet in
+            XCTAssertEqual(dataSet.items.first?.title, "test")
+        } .then {
+            self.dataSource.delete(id: id)
+        } .then { _ in
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testChecklistDataSourceFetchChecklistByChecklist() {
+        let ex = expectation(description: "testChecklistDataSourceFetchChecklistByChecklist")
+        let id = NSUUID().uuidString
+
+        firstly {
+            self.dataSource.create(id: id)
+        } .then { dataSet in
+            self.dataSource.fetch(dataSet.items[0])
+        } .then { dataSet in
+            XCTAssertEqual(dataSet.items.first?.id, id)
+        } .then {
+            self.dataSource.delete(id: id)
         } .then { _ in
             ex.fulfill()
         } .catch { error in
@@ -179,13 +282,13 @@ class ChecklistTests: XCTestCase {
         let id = NSUUID().uuidString
 
         firstly {
-            self._createChecklist(id: id, in: self.dataSource)
+            self.dataSource.create(id: id)
         } .then { _ in
-            self.dataSource.fetchChecklists()
+            self.dataSource.fetch(ChecklistDataSource.Criteria())
         } .then { dataSet in
             XCTAssertTrue(dataSet.items.contains { checklist in checklist.id == id })
         } .then {
-            self._deleteChecklist(id: id, in: self.dataSource)
+            self.dataSource.delete(id: id)
         } .then { _ in
             ex.fulfill()
         } .catch { error in
@@ -197,14 +300,6 @@ class ChecklistTests: XCTestCase {
     }
 
     // MARK: Private
-
-    private func _createChecklist(id: String, in dataSource: ChecklistDataSource) -> ChecklistDataSetPromise {
-        return dataSource.updateChecklists(DataSet(items: [Checklist(id: id, title: id, items: [])]))
-    }
-
-    private func _deleteChecklist(id: String, in dataSource: ChecklistDataSource) -> ChecklistDataSetPromise {
-        return dataSource.deleteChecklist(id: id)
-    }
 
     private func _hasChecklist(id: String, in dataSource: ChecklistDataSource) -> Bool {
         return dataSource.fileManager.fileExists(atPath: dataSource.url(forId: id).path)

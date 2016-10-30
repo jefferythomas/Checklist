@@ -13,6 +13,12 @@ struct Checklist {
     var id: String
     var title: String
     var items: [ChecklistItem]
+
+    init(id: String, title: String = "", items: [ChecklistItem] = []) {
+        self.id = id
+        self.title = title
+        self.items = items
+    }
 }
 
 extension Checklist: Decodable {
@@ -29,4 +35,9 @@ extension Checklist: JSONEncodable {
     func JSONEncode() throws -> Any {
         return ["id": id, "title": title, "items": try items.JSONEncode()]
     }
+}
+
+extension Checklist: ChecklistFetchable {
+    var idsToFetch: [String] { return [id] }
+    var titlesToFetch: [String] { return [] }
 }
