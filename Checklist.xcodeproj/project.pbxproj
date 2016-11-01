@@ -98,6 +98,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B0F5DA21DC8282E008CD50D /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				7B4A55821DA9ED2700A55E2A /* DataSet.swift */,
+			);
+			path = Containers;
+			sourceTree = "<group>";
+		};
 		7B4F035B1D09021200668867 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,7 +121,6 @@
 				7B75C5941CE960140047AACF /* Checklist.swift */,
 				7B75C5961CE960EE0047AACF /* ChecklistItem.swift */,
 				7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */,
-				7B4A55821DA9ED2700A55E2A /* DataSet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -151,6 +158,7 @@
 		7BB76A8C1CE7B43500D05C9C /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				7B0F5DA21DC8282E008CD50D /* Containers */,
 				7B75C5931CE95FDC0047AACF /* Models */,
 				7B4F035B1D09021200668867 /* Protocols */,
 				7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */,
