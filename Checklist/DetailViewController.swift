@@ -10,13 +10,13 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    var detailItem: Date? { didSet { self.configureView() } }
+    var checklist: Checklist? { didSet { self.configureView() } }
 
     @IBOutlet var detailDescriptionLabel: UILabel?
 
     func configureView() {
-        if let detailItem = self.detailItem {
-            self.detailDescriptionLabel?.text = detailItem.description
+        if let checklist = self.checklist {
+            self.detailDescriptionLabel?.text = checklist.title
         } else {
             self.detailDescriptionLabel?.text = "No Content"
         }
