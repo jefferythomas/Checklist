@@ -1,5 +1,5 @@
 //
-//  CreateNewChecklistUseCase.swift
+//  InsertNewChecklistUseCase.swift
 //  Checklist
 //
 //  Created by Jeffery Thomas on 11/10/16.

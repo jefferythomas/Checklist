@@ -26,7 +26,7 @@
 		7BB76A9A1CE7B43500D05C9C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BB76A981CE7B43500D05C9C /* LaunchScreen.storyboard */; };
 		7BB76AA51CE7B43500D05C9C /* ChecklistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76AA41CE7B43500D05C9C /* ChecklistTests.swift */; };
 		7BB76AB01CE7B43500D05C9C /* ChecklistUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76AAF1CE7B43500D05C9C /* ChecklistUITests.swift */; };
-		7BBCDEC31DD519C9000F216D /* CreateNewChecklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBCDEBF1DD519C9000F216D /* CreateNewChecklistUseCase.swift */; };
+		7BBCDEC31DD519C9000F216D /* InsertNewChecklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBCDEBF1DD519C9000F216D /* InsertNewChecklistUseCase.swift */; };
 		7BBCDEC41DD519C9000F216D /* DeleteChecklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBCDEC01DD519C9000F216D /* DeleteChecklistUseCase.swift */; };
 		7BBCDEC51DD519C9000F216D /* LoadAllChecklistsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBCDEC11DD519C9000F216D /* LoadAllChecklistsUseCase.swift */; };
 		7BBCDEC61DD519C9000F216D /* RenameChecklistUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBCDEC21DD519C9000F216D /* RenameChecklistUseCase.swift */; };
@@ -73,7 +73,7 @@
 		7BB76AAB1CE7B43500D05C9C /* ChecklistUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChecklistUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BB76AAF1CE7B43500D05C9C /* ChecklistUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistUITests.swift; sourceTree = "<group>"; };
 		7BB76AB11CE7B43500D05C9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7BBCDEBF1DD519C9000F216D /* CreateNewChecklistUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewChecklistUseCase.swift; sourceTree = "<group>"; };
+		7BBCDEBF1DD519C9000F216D /* InsertNewChecklistUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertNewChecklistUseCase.swift; sourceTree = "<group>"; };
 		7BBCDEC01DD519C9000F216D /* DeleteChecklistUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteChecklistUseCase.swift; sourceTree = "<group>"; };
 		7BBCDEC11DD519C9000F216D /* LoadAllChecklistsUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadAllChecklistsUseCase.swift; sourceTree = "<group>"; };
 		7BBCDEC21DD519C9000F216D /* RenameChecklistUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameChecklistUseCase.swift; sourceTree = "<group>"; };
@@ -213,7 +213,7 @@
 		7BBCDEBE1DD519C9000F216D /* ChecklistUseCases */ = {
 			isa = PBXGroup;
 			children = (
-				7BBCDEBF1DD519C9000F216D /* CreateNewChecklistUseCase.swift */,
+				7BBCDEBF1DD519C9000F216D /* InsertNewChecklistUseCase.swift */,
 				7BBCDEC01DD519C9000F216D /* DeleteChecklistUseCase.swift */,
 				7BBCDEC11DD519C9000F216D /* LoadAllChecklistsUseCase.swift */,
 				7BBCDEC21DD519C9000F216D /* RenameChecklistUseCase.swift */,
@@ -395,7 +395,7 @@
 				7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */,
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
 				7BBCDEC41DD519C9000F216D /* DeleteChecklistUseCase.swift in Sources */,
-				7BBCDEC31DD519C9000F216D /* CreateNewChecklistUseCase.swift in Sources */,
+				7BBCDEC31DD519C9000F216D /* InsertNewChecklistUseCase.swift in Sources */,
 				7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */,
 				7B7067501DC1988B00674002 /* ChecklistFetchable.swift in Sources */,
 				7BAA027D1DD4E99A0019E2AC /* ChecklistBusinessLogic.swift in Sources */,
