@@ -10,7 +10,7 @@ import Foundation
 import Decodable
 
 struct Checklist {
-    var id: String
+    private(set) var id: String
     var title: String
     var items: [ChecklistItem]
 

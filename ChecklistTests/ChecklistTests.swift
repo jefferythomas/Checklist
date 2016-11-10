@@ -163,6 +163,28 @@ class ChecklistTests: XCTestCase {
 
     func testChecklistDataSourceCreateAndDelete() {
         let ex = expectation(description: "testChecklistDataSourceCreateAndDelete")
+
+        firstly {
+            self.dataSource.create()
+        } .then { dataSet -> ChecklistDataSet in
+            XCTAssertTrue(self._hasChecklist(id: dataSet.items[0].id, in: self.dataSource))
+            return dataSet
+        } .then { dataSet in
+            self.dataSource.delete(dataSet: dataSet)
+        } .then { dataSet in
+            XCTAssertFalse(self._hasChecklist(id: dataSet.items[0].id, in: self.dataSource))
+        } .then {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testChecklistDataSourceFetchChecklistById() {
+        let ex = expectation(description: "testChecklistDataSourceCreateAndDeleteId")
         let id = NSUUID().uuidString
 
         firstly {
@@ -170,7 +192,7 @@ class ChecklistTests: XCTestCase {
         } .then { _ in
             XCTAssertTrue(self._hasChecklist(id: id, in: self.dataSource))
         } .then {
-            self.dataSource.delete(id: id)
+            self.dataSource.delete(ids: [id])
         } .then { _ in
             XCTAssertFalse(self._hasChecklist(id: id, in: self.dataSource))
         } .then {
@@ -183,43 +205,21 @@ class ChecklistTests: XCTestCase {
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
-    func testChecklistDataSourceFetchChecklistById() {
-        let ex = expectation(description: "testChecklistDataSourceFetchChecklistById")
-        let id = NSUUID().uuidString
-
-        firstly {
-            self.dataSource.create(id: id)
-        } .then { _ in
-            self.dataSource.fetch(ChecklistDataSource.Criteria(ids: [id]))
-        } .then { dataSet in
-            XCTAssertEqual(dataSet.items.first?.id, id)
-        } .then {
-            self.dataSource.delete(id: id)
-        } .then { _ in
-            ex.fulfill()
-        } .catch { error in
-            XCTFail("error: \(error)")
-            ex.fulfill()
-        }
-
-        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
-    }
-
     func testChecklistDataSourceFetchChecklistByTitle() {
         let ex = expectation(description: "testChecklistDataSourceFetchChecklistByTitle")
-        let id = NSUUID().uuidString
 
         firstly {
-            self.dataSource.create(id: id)
+            self.dataSource.create()
         } .then { dataSet -> ChecklistDataSetPromise in
             dataSet.items[0].title = "test"
             return self.dataSource.update(dataSet: dataSet)
         } .then { _ in
             self.dataSource.fetch(ChecklistDataSource.Criteria(titles: ["test"]))
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSet in
             XCTAssertEqual(dataSet.items.first?.title, "test")
-        } .then {
-            self.dataSource.delete(id: id)
+            return dataSet
+        } .then { dataSet in
+            self.dataSource.delete(dataSet: dataSet)
         } .then { _ in
             ex.fulfill()
         } .catch { error in
@@ -244,7 +244,7 @@ class ChecklistTests: XCTestCase {
         } .then { dataSet in
             XCTAssertEqual(dataSet.items.first?.title, "test")
         } .then {
-            self.dataSource.delete(id: id)
+            self.dataSource.delete(ids: [id])
         } .then { _ in
             ex.fulfill()
         } .catch { error in
@@ -263,10 +263,11 @@ class ChecklistTests: XCTestCase {
             self.dataSource.create(id: id)
         } .then { dataSet in
             self.dataSource.fetch(dataSet.items[0])
-        } .then { dataSet in
+        } .then { dataSet -> () in
+            XCTAssertEqual(dataSet.items.count, 1)
             XCTAssertEqual(dataSet.items.first?.id, id)
         } .then {
-            self.dataSource.delete(id: id)
+            self.dataSource.delete(ids: [id])
         } .then { _ in
             ex.fulfill()
         } .catch { error in
@@ -288,7 +289,7 @@ class ChecklistTests: XCTestCase {
         } .then { dataSet in
             XCTAssertTrue(dataSet.items.contains { checklist in checklist.id == id })
         } .then {
-            self.dataSource.delete(id: id)
+            self.dataSource.delete(ids: [id])
         } .then { _ in
             ex.fulfill()
         } .catch { error in

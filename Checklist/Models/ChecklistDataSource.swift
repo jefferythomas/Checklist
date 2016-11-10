@@ -62,13 +62,21 @@ class ChecklistDataSource {
         }
     }
 
-    func delete(id: String) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
-            let url = self.url(forId: id)
-            let checklist = try Checklist._from(fileUrl: url)
-            try self.fileManager.removeItem(at: url)
-            
-            return DataSet(items: [checklist])
+    func delete(dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
+        return DispatchQueue.main.promise {
+            for checklist in dataSet.items {
+                try self.fileManager.removeItem(at: self.url(forId: checklist.id))
+            }
+
+            return dataSet // JLT: For now, echo back the input
+        }
+    }
+
+    func delete(ids: [String]) -> ChecklistDataSetPromise {
+        return firstly {
+            self.fetch(Criteria(ids: ids))
+        }.then { dataSet in
+            self.delete(dataSet: dataSet)
         }
     }
 
