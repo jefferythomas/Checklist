@@ -11,18 +11,25 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func renameChecklist(title: String, in checklists: ChecklistDataSet, at index: Int) -> Promise<Void> {
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
-            var checklist = checklists.items[index]
+    func renameChecklist(title: String, at index: Int) -> Promise<Void> {
+        let checklistsRaceConditionSafe = self.checklists
+        let checklist = Checklist(id: self.checklists[index].id, title: title, items: self.checklists[index].items)
 
-            checklist.title = title
-
-            return ChecklistDataSet(items: [checklist])
+        return firstly {
+            self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
         } .then { dataSet in
-            return self.dataSource.update(dataSet: checklists)
-        } .then { dataSet in
-            checklists.items[index] = dataSet.items[0]
+            self.checklists = checklistsRaceConditionSafe.replaced(at: index, with: dataSet.items[0])
         }
     }
     
+}
+
+extension Array {
+
+    func replaced(at index: Int, with element: Element) -> Array {
+        var result = self
+        result[index] = element
+        return result
+    }
+
 }

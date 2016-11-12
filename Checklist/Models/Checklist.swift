@@ -10,15 +10,9 @@ import Foundation
 import Decodable
 
 struct Checklist {
-    private(set) var id: String
-    var title: String
-    var items: [ChecklistItem]
-
-    init(id: String, title: String = "", items: [ChecklistItem] = []) {
-        self.id = id
-        self.title = title
-        self.items = items
-    }
+    let id: String
+    let title: String
+    let items: [ChecklistItem]
 }
 
 extension Checklist: Decodable {

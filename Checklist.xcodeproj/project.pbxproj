@@ -226,9 +226,9 @@
 		7BBCDEBE1DD519C9000F216D /* ChecklistUseCases */ = {
 			isa = PBXGroup;
 			children = (
+				7BBCDEC11DD519C9000F216D /* LoadAllChecklistsUseCase.swift */,
 				7BBCDEBF1DD519C9000F216D /* InsertNewChecklistUseCase.swift */,
 				7BBCDEC01DD519C9000F216D /* DeleteChecklistUseCase.swift */,
-				7BBCDEC11DD519C9000F216D /* LoadAllChecklistsUseCase.swift */,
 				7BBCDEC21DD519C9000F216D /* RenameChecklistUseCase.swift */,
 				7BBCDED31DD51D6E000F216D /* TearChecklistUseCase.swift */,
 			);

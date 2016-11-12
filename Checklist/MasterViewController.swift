@@ -11,7 +11,6 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     lazy var businessLogic = ChecklistBusinessLogic.sharedInstance
-    lazy var checklists = ChecklistDataSet(items: [])
     lazy var defaultTitle = "Checklist"
 
     @IBAction func insertNewChecklist(_ sender: AnyObject) {
@@ -19,7 +18,7 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewChecklist(title: String, at indexPath: IndexPath) {
-        businessLogic.insertNewChecklist(title: title, into: checklists, at: indexPath.row).then {
+        businessLogic.insertNewChecklist(title: title, at: indexPath.row).then {
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to insert new checklist to checklists: \(error)")
@@ -27,7 +26,7 @@ class MasterViewController: UITableViewController {
     }
 
     func deleteChecklist(at indexPath: IndexPath) {
-        businessLogic.deleteChecklist(from: checklists, at: indexPath.row).then {
+        businessLogic.deleteChecklist(at: indexPath.row).then {
             self.tableView.deleteRows(at: [indexPath], with: .fade)
         } .catch { error in
             print("Unable to delete checklist to checklists: \(error)")
@@ -45,10 +44,10 @@ class MasterViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         self.navigationItem.rightBarButtonItem = addButton
 
-        self.businessLogic.loadAllChecklists(into: checklists).then {
+        self.businessLogic.loadAllChecklists().then {
             self.tableView.reloadData()
         } .catch { error in
-            print("Unable to delete checklist to checklists: \(error)")
+            print("Unable to load all checklists: \(error)")
         }
     }
 
@@ -62,13 +61,10 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier ?? "" {
         case "showDetail":
-            if let indexPath = self.tableView.indexPathForSelectedRow  {
-                let navigationController = segue.destination as? UINavigationController
-                let detailViewController = navigationController?.topViewController as? DetailViewController
-                let checklist = checklists.items[indexPath.row]
+            guard let indexPath = self.tableView.indexPathForSelectedRow else { break }
+            guard let detailViewController = segue.detailViewControllerFromDestination() else { break }
 
-                detailViewController?.checklist = checklist
-            }
+            detailViewController.checklist = businessLogic.checklists[indexPath.row]
 
         default:
             break
@@ -78,7 +74,7 @@ class MasterViewController: UITableViewController {
     // MARK: Table View
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return checklists.items.count
+        return businessLogic.checklists.count
     }
 
     override func tableView(_ tableView: UITableView,
@@ -86,7 +82,8 @@ class MasterViewController: UITableViewController {
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        cell.textLabel?.text = checklists.items[indexPath.row].title
+        cell.textLabel?.text = businessLogic.checklists[indexPath.row].title
+
         return cell
     }
 
@@ -105,4 +102,19 @@ class MasterViewController: UITableViewController {
         }
     }
 
+}
+
+extension UIStoryboardSegue {
+    func detailViewControllerFromDestination() -> DetailViewController? {
+        if let detailViewController = self.destination as? DetailViewController {
+            return detailViewController
+        }
+
+        if let navigationController = self.destination as? UINavigationController,
+            let detailViewController = navigationController.topViewController as? DetailViewController {
+            return detailViewController
+        }
+
+        return nil
+    }
 }

@@ -11,12 +11,24 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func deleteChecklist(from checklists: ChecklistDataSet, at index: Int) -> Promise<Void> {
+    func deleteChecklist(at index: Int) -> Promise<Void> {
+        let checklistsRaceConditionSafe = self.checklists
+
         return firstly {
-            self.dataSource.delete(dataSet: ChecklistDataSet(items: [checklists.items[index]]))
+            self.dataSource.delete(dataSet: ChecklistDataSet(items: [self.checklists[index]]))
         } .then { dataSet in
-            checklists.items.remove(at: index)
+            self.checklists = checklistsRaceConditionSafe.removed(at: index)
         }
+    }
+    
+}
+
+extension Array {
+
+    func removed(at index: Int) -> Array {
+        var result = self
+        result.remove(at: index)
+        return result
     }
     
 }

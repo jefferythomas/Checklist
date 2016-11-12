@@ -21,12 +21,10 @@ class ChecklistDataSource {
     }
 
     func create(id: String) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
-            let checklist = Checklist(id: id)
-
-            return DataSet(items: [checklist])
-        }.then {
-            return self.update(dataSet: $0)
+        return DispatchQueue.main.promise {
+            DataSet(items: [Checklist(id: id, title: "", items: [])])
+        }.then { dataSet in
+            self.update(dataSet: dataSet)
         }
     }
 

@@ -11,5 +11,6 @@ import Foundation
 class ChecklistBusinessLogic {
     static let sharedInstance = ChecklistBusinessLogic()
 
+    lazy var checklists = [Checklist]()
     lazy var dataSource = ChecklistDataSource()
 }
