@@ -17,7 +17,10 @@ extension ChecklistBusinessLogic {
         return firstly {
             self.dataSource.create()
         } .then { dataSet in
-            Checklist(id: dataSet.items[0].id, title: title, items:[])
+            // After the new checklist is created, set the name and perform the udpate.
+            Checklist(id: dataSet.items[0].id,
+                      title: title,
+                      items: dataSet.items[0].items)
         } .then { checklist in
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
         } .then { dataSet in

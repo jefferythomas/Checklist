@@ -13,10 +13,13 @@ extension ChecklistBusinessLogic {
 
     func renameChecklist(title: String, at index: Int) -> Promise<Void> {
         let checklistsRaceConditionSafe = self.checklists
-        let checklist = Checklist(id: self.checklists[index].id, title: title, items: self.checklists[index].items)
+
+        let renamedChecklist = Checklist(id: self.checklists[index].id,
+                                         title: title,
+                                         items: self.checklists[index].items)
 
         return firstly {
-            self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
+            self.dataSource.update(dataSet: ChecklistDataSet(items: [renamedChecklist]))
         } .then { dataSet in
             self.checklists = checklistsRaceConditionSafe.replaced(at: index, with: dataSet.items[0])
         }
