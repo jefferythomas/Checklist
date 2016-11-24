@@ -13,8 +13,12 @@ class MasterViewController: UITableViewController {
     lazy var businessLogic = ChecklistBusinessLogic.sharedInstance
     lazy var defaultTitle = "Checklist"
 
-    @IBAction func insertNewChecklist(_ sender: AnyObject) {
+    @IBAction func insertNewChecklist(_ sender: Any?) {
         insertNewChecklist(title: defaultTitle, at: IndexPath(row: 0, section: 0))
+    }
+
+    @IBAction func dissmissKeyboard(_ sender: Any?) {
+        self.view.endEditing(true)
     }
 
     func insertNewChecklist(title: String, at indexPath: IndexPath) {
@@ -29,7 +33,15 @@ class MasterViewController: UITableViewController {
         businessLogic.deleteChecklist(at: indexPath.row).then {
             self.tableView.deleteRows(at: [indexPath], with: .fade)
         } .catch { error in
-            print("Unable to delete checklist to checklists: \(error)")
+            print("Unable to delete checklist from checklists: \(error)")
+        }
+    }
+
+    func renameChecklist(title: String, at indexPath: IndexPath) {
+        businessLogic.renameChecklist(title: title, at: indexPath.row) .then {
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            } .catch { error in
+                print("Unable to rename checklist at \(indexPath.row): \(error)")
         }
     }
 
@@ -71,7 +83,9 @@ class MasterViewController: UITableViewController {
         }
     }
 
-    // MARK: Table View
+}
+
+extension MasterViewController /* UITableViewDataSource, UITableViewDelegate */ {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return businessLogic.checklists.count
@@ -80,9 +94,10 @@ class MasterViewController: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TextFieldTableViewCell
+        let title = businessLogic.checklists[indexPath.row].title
 
-        cell.textLabel?.text = businessLogic.checklists[indexPath.row].title
+        cell.textTextField?.text = title
 
         return cell
     }
@@ -104,7 +119,25 @@ class MasterViewController: UITableViewController {
 
 }
 
+extension MasterViewController: UITextFieldDelegate {
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let title = textField.text else { return }
+        guard let indexPath = textField.indexPathOfSuperTableViewCell else { return }
+        guard title != businessLogic.checklists[indexPath.row].title else { return }
+
+        renameChecklist(title: title, at: indexPath)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.dissmissKeyboard(textField)
+        return true
+    }
+
+}
+
 extension UIStoryboardSegue {
+
     func detailViewControllerFromDestination() -> DetailViewController? {
         if let detailViewController = self.destination as? DetailViewController {
             return detailViewController
@@ -117,4 +150,5 @@ extension UIStoryboardSegue {
 
         return nil
     }
+
 }

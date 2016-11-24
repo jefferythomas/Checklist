@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B247EA21DE0C77000DC074C /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B247EA11DE0C77000DC074C /* TextFieldTableViewCell.swift */; };
+		7B247EA41DE0C7C900DC074C /* TableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */; };
 		7B4A55831DA9ED2700A55E2A /* DataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A55821DA9ED2700A55E2A /* DataSet.swift */; };
 		7B4F035D1D09022E00668867 /* JSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4F035C1D09022E00668867 /* JSONEncodable.swift */; };
 		7B7067501DC1988B00674002 /* ChecklistFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B70674F1DC1988B00674002 /* ChecklistFetchable.swift */; };
@@ -56,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B247EA11DE0C77000DC074C /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewExtensions.swift; sourceTree = "<group>"; };
 		7B4A55821DA9ED2700A55E2A /* DataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSet.swift; sourceTree = "<group>"; };
 		7B4F035C1D09022E00668867 /* JSONEncodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncodable.swift; sourceTree = "<group>"; };
 		7B70674F1DC1988B00674002 /* ChecklistFetchable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistFetchable.swift; sourceTree = "<group>"; };
@@ -128,6 +132,22 @@
 			path = Containers;
 			sourceTree = "<group>";
 		};
+		7B247E9F1DE0C77000DC074C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		7B247EA01DE0C77000DC074C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7B247EA11DE0C77000DC074C /* TextFieldTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		7B4F035B1D09021200668867 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,8 +212,10 @@
 			children = (
 				7BAA027E1DD4EA5D0019E2AC /* UseCases */,
 				7B0F5DA21DC8282E008CD50D /* Containers */,
+				7B247E9F1DE0C77000DC074C /* Extensions */,
 				7B75C5931CE95FDC0047AACF /* Models */,
 				7B4F035B1D09021200668867 /* Protocols */,
+				7B247EA01DE0C77000DC074C /* Views */,
 				7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */,
 				7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */,
 				7BB76A911CE7B43500D05C9C /* DetailViewController.swift */,
@@ -424,6 +446,8 @@
 				7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */,
 				7BBCDECE1DD51CAD000F216D /* RenameChecklistItemUseCase.swift in Sources */,
 				7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */,
+				7B247EA41DE0C7C900DC074C /* TableViewExtensions.swift in Sources */,
+				7B247EA21DE0C77000DC074C /* TextFieldTableViewCell.swift in Sources */,
 				7BBCDEC41DD519C9000F216D /* DeleteChecklistUseCase.swift in Sources */,
 				7BBCDEC31DD519C9000F216D /* InsertNewChecklistUseCase.swift in Sources */,
 				7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */,

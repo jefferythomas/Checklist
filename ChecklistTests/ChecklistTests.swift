@@ -11,17 +11,23 @@ import PromiseKit
 @testable import Checklist
 
 class ChecklistTests: XCTestCase {
-    let dataSource: ChecklistDataSource = {
-        let dataSource = ChecklistDataSource()
+    lazy var dataSource = ChecklistDataSource()
+    lazy var businessLogic = ChecklistBusinessLogic()
 
-        let path = "/tmp/ChecklistTests\(UUID().uuidString)/"
-        dataSource.baseUrl = URL(fileURLWithPath: path, isDirectory: true)
+    override func setUp() {
+        dataSource = ChecklistDataSource()
+        businessLogic = ChecklistBusinessLogic()
 
-        return dataSource
-    }()
+        let baseURL = URL(fileURLWithPath: "/tmp/ChecklistTests\(UUID().uuidString)/", isDirectory: true)
 
-    deinit {
+        dataSource.baseUrl = baseURL
+        businessLogic.dataSource = dataSource
+    }
+
+    override func tearDown() {
+        XCTAssertNil(dataSource.fileManager._enumerator(at:dataSource.baseUrl)?.nextObject())
         try? dataSource.fileManager.removeItem(at: dataSource.baseUrl)
+        XCTAssertFalse(dataSource.fileManager.fileExists(atPath: dataSource.baseUrl.path))
     }
 
     func testChecklistItemInitWithTitle() {
@@ -59,8 +65,8 @@ class ChecklistTests: XCTestCase {
 
         let json = try? item.JSONEncode()
 
-        let title = (json as? [String: AnyObject])?["title"] as? String
-        let checked = (json as? [String: AnyObject])?["checked"] as? Bool
+        let title = (json as? [String: Any])?["title"] as? String
+        let checked = (json as? [String: Any])?["checked"] as? Bool
 
         XCTAssertEqual(title, "test")
         XCTAssertEqual(checked, false)
@@ -90,8 +96,8 @@ class ChecklistTests: XCTestCase {
 
         let json = try? checklist.JSONEncode()
 
-        let title = (json as? [String: AnyObject])?["title"] as? String
-        let items = (json as? [String: AnyObject])?["items"] as? [[String: AnyObject]]
+        let title = (json as? [String: Any])?["title"] as? String
+        let items = (json as? [String: Any])?["items"] as? [[String: Any]]
         let firstItemTitle = items?.first?["title"] as? String
         let firstItemChecked = items?.first?["checked"] as? Bool
 
@@ -136,12 +142,12 @@ class ChecklistTests: XCTestCase {
         firstly {
             self.dataSource.create()
         } .then { dataSet -> ChecklistDataSet in
-            XCTAssertTrue(self._hasChecklist(id: dataSet.items[0].id, in: self.dataSource))
+            XCTAssertTrue(self.dataSource._hasChecklist(with: dataSet.items[0].id))
             return dataSet
         } .then { dataSet in
             self.dataSource.delete(dataSet: dataSet)
         } .then { dataSet in
-            XCTAssertFalse(self._hasChecklist(id: dataSet.items[0].id, in: self.dataSource))
+            XCTAssertFalse(self.dataSource._hasChecklist(with: dataSet.items[0].id))
         } .always {
             ex.fulfill()
         } .catch { error in
@@ -158,11 +164,11 @@ class ChecklistTests: XCTestCase {
         firstly {
             self.dataSource.create(id: id)
         } .then { _ in
-            XCTAssertTrue(self._hasChecklist(id: id, in: self.dataSource))
+            XCTAssertTrue(self.dataSource._hasChecklist(with: id))
         } .then {
             self.dataSource.delete(ids: [id])
         } .then { _ in
-            XCTAssertFalse(self._hasChecklist(id: id, in: self.dataSource))
+            XCTAssertFalse(self.dataSource._hasChecklist(with: id))
         } .always {
             ex.fulfill()
         } .catch { error in
@@ -269,10 +275,104 @@ class ChecklistTests: XCTestCase {
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
-    // MARK: Private
+    func testLoadAllChecklists() {
+        let ex = expectation(description: "testLoadAllChecklists")
+        let id = NSUUID().uuidString
+        let logic = self.businessLogic
 
-    private func _hasChecklist(id: String, in dataSource: ChecklistDataSource) -> Bool {
-        return dataSource.fileManager.fileExists(atPath: dataSource.url(forId: id).path)
+        firstly {
+            logic.dataSource.create(id: id)
+        } .then { _ in
+            logic.loadAllChecklists()
+        } .then {
+            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].id == id )
+        } .then {
+           logic.dataSource.delete(ids: [id])
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
+    func testInsertNewChecklist() {
+        let ex = expectation(description: "testInsertNewChecklist")
+        let logic = self.businessLogic
+
+        firstly {
+            logic.insertNewChecklist(title: "test", at: 0)
+        } .then {
+            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "test")
+        } .then {
+            logic.dataSource.delete(ids: [logic.checklists[0].id])
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testDeleteChecklist() {
+        let ex = expectation(description: "testDeleteChecklist")
+        let id = NSUUID().uuidString
+        let logic = self.businessLogic
+
+        firstly {
+            logic.dataSource.create(id: id)
+        } .then { _ in
+            logic.loadAllChecklists()
+        } .then {
+            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].id == id)
+        } .then {
+            logic.deleteChecklist(at: 0)
+        } .then {
+            XCTAssert(logic.checklists.count == 0 && !logic.dataSource._hasChecklist(with: id))
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+    func testRenameChecklist() {
+        let ex = expectation(description: "testRenameChecklist")
+        let logic = businessLogic
+
+        firstly {
+            logic.insertNewChecklist(title: "test", at: 0)
+        } .then {
+            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "test")
+        } .then {
+            logic.renameChecklist(title: "renamed", at: 0)
+        } .then {
+            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "renamed")
+        } .then {
+            logic.dataSource.delete(ids: [logic.checklists[0].id])
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
+}
+
+extension ChecklistDataSource {
+    fileprivate func _hasChecklist(with id: String) -> Bool {
+        return fileManager.fileExists(atPath: url(forId: id).path)
+    }
+}
+
+extension FileManager {
+    fileprivate func _enumerator(at url: URL) -> FileManager.DirectoryEnumerator? {
+        return enumerator(at: url, includingPropertiesForKeys: [])
+    }
 }
