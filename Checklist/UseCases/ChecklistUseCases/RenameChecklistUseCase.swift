@@ -12,11 +12,10 @@ import PromiseKit
 extension ChecklistBusinessLogic {
 
     func renameChecklist(title: String, at index: Int) -> Promise<Void> {
-        let checklistsRaceConditionSafe = self.checklists
+        let checklistsRaceConditionSafe = checklists
+        assert(0 ..< checklistsRaceConditionSafe.count ~= index)
 
-        let renamedChecklist = Checklist(id: self.checklists[index].id,
-                                         title: title,
-                                         items: self.checklists[index].items)
+        let renamedChecklist = checklistsRaceConditionSafe[index].renamed(to: title)
 
         return firstly {
             self.dataSource.update(dataSet: ChecklistDataSet(items: [renamedChecklist]))
@@ -25,14 +24,4 @@ extension ChecklistBusinessLogic {
         }
     }
     
-}
-
-extension Array {
-
-    func replaced(at index: Int, with element: Element) -> Array {
-        var result = self
-        result[index] = element
-        return result
-    }
-
 }

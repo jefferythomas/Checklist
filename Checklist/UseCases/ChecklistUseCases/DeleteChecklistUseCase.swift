@@ -13,11 +13,14 @@ extension ChecklistBusinessLogic {
 
     func deleteChecklist(at index: Int) -> Promise<Void> {
         let checklistsRaceConditionSafe = self.checklists
+        assert(0 ..< checklistsRaceConditionSafe.count ~= index)
+
+        let deletedChecklist = checklistsRaceConditionSafe[index]
 
         return firstly {
-            self.dataSource.delete(dataSet: ChecklistDataSet(items: [self.checklists[index]]))
+            self.dataSource.delete(dataSet: ChecklistDataSet(items: [deletedChecklist]))
         } .then { dataSet in
-            self.checklists = checklistsRaceConditionSafe.removed(at: index)
+            self.checklists = checklistsRaceConditionSafe._removed(at: index)
         }
     }
     
@@ -25,7 +28,7 @@ extension ChecklistBusinessLogic {
 
 extension Array {
 
-    func removed(at index: Int) -> Array {
+    fileprivate func _removed(at index: Int) -> Array {
         var result = self
         result.remove(at: index)
         return result

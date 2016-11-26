@@ -13,7 +13,7 @@ extension ChecklistBusinessLogic {
 
     func loadAllChecklists() -> Promise<Void> {
         return firstly {
-            self.dataSource.fetch(ChecklistDataSource.Criteria())
+            self.dataSource.fetch(ChecklistDataSource.Criteria()) // fetching empty critera returns all checklists
         } .then { dataSet in
             self.checklists = dataSet.items
         }

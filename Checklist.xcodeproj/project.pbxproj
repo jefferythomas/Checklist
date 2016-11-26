@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B1DD5201DE7D7D9004A0C22 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1DD51F1DE7D7D9004A0C22 /* Extensions.swift */; };
 		7B247EA21DE0C77000DC074C /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B247EA11DE0C77000DC074C /* TextFieldTableViewCell.swift */; };
 		7B247EA41DE0C7C900DC074C /* TableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */; };
 		7B4A55831DA9ED2700A55E2A /* DataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A55821DA9ED2700A55E2A /* DataSet.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B1DD51F1DE7D7D9004A0C22 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7B247EA11DE0C77000DC074C /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewExtensions.swift; sourceTree = "<group>"; };
 		7B4A55821DA9ED2700A55E2A /* DataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSet.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		7B247E9F1DE0C77000DC074C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				7B1DD51F1DE7D7D9004A0C22 /* Extensions.swift */,
 				7B247EA31DE0C7C900DC074C /* TableViewExtensions.swift */,
 			);
 			path = Extensions;
@@ -437,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B1DD5201DE7D7D9004A0C22 /* Extensions.swift in Sources */,
 				7BBCDECC1DD51C84000F216D /* DeleteChecklistItemUseCase.swift in Sources */,
 				7BBCDECA1DD51C58000F216D /* InsertNewChecklistItemUseCase.swift in Sources */,
 				7BBCDED01DD51CCC000F216D /* CheckChecklistItemUseCase.swift in Sources */,

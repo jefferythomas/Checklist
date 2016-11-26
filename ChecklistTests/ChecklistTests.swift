@@ -25,7 +25,7 @@ class ChecklistTests: XCTestCase {
     }
 
     override func tearDown() {
-        XCTAssertNil(dataSource.fileManager._enumerator(at:dataSource.baseUrl)?.nextObject())
+        XCTAssertNil(dataSource.fileManager.enumerator(atPath: dataSource.baseUrl.path)?.nextObject())
         try? dataSource.fileManager.removeItem(at: dataSource.baseUrl)
         XCTAssertFalse(dataSource.fileManager.fileExists(atPath: dataSource.baseUrl.path))
     }
@@ -363,16 +363,43 @@ class ChecklistTests: XCTestCase {
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
+    func testTearChecklist() {
+        let ex = expectation(description: "testTearChecklist")
+        let logic = businessLogic
+
+        firstly {
+            logic.dataSource.create()
+        } .then { dataSet in
+            Checklist(id: dataSet.items[0].id,
+                      title: "checklist",
+                      items: [ChecklistItem(title: "item", checked: true)])
+        } .then { checklist in
+            logic.dataSource.update(dataSet: DataSet(items: [checklist]))
+        } .then { dataSet in
+            logic.checklists = dataSet.items
+        } .then { dataSet in
+            XCTAssertTrue(logic.checklists[0].items[0].checked)
+        } .then {
+            logic.tearChecklist(at: 0)
+        } .then {
+            XCTAssertFalse(logic.checklists[0].items[0].checked)
+        } .then {
+            logic.dataSource.delete(ids: [logic.checklists[0].id])
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
 }
 
 extension ChecklistDataSource {
+
     fileprivate func _hasChecklist(with id: String) -> Bool {
         return fileManager.fileExists(atPath: url(forId: id).path)
     }
-}
 
-extension FileManager {
-    fileprivate func _enumerator(at url: URL) -> FileManager.DirectoryEnumerator? {
-        return enumerator(at: url, includingPropertiesForKeys: [])
-    }
 }

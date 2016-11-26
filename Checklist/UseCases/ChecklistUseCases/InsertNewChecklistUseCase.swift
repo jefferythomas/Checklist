@@ -13,18 +13,16 @@ extension ChecklistBusinessLogic {
 
     func insertNewChecklist(title: String, at index: Int) -> Promise<Void> {
         let checklistsRaceConditionSafe = self.checklists
+        assert(0 ... checklistsRaceConditionSafe.count ~= index)
 
         return firstly {
             self.dataSource.create()
         } .then { dataSet in
-            // After the new checklist is created, set the name and perform the udpate.
-            Checklist(id: dataSet.items[0].id,
-                      title: title,
-                      items: dataSet.items[0].items)
+            dataSet.items[0].renamed(to: title) // After the new checklist is created, set the name
         } .then { checklist in
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
         } .then { dataSet in
-            self.checklists = checklistsRaceConditionSafe.inserted(dataSet.items[0], at: index)
+            self.checklists = checklistsRaceConditionSafe._inserted(dataSet.items[0], at: index)
         }
     }
 
@@ -32,7 +30,7 @@ extension ChecklistBusinessLogic {
 
 extension Array {
 
-    func inserted(_ element: Element, at index: Int) -> Array {
+    fileprivate func _inserted(_ element: Element, at index: Int) -> Array {
         var result = self
         result.insert(element, at: index)
         return result
