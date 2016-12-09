@@ -10,26 +10,52 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    var checklist: Checklist? { didSet { self.configureView() } }
+    lazy var businessLogic = ChecklistBusinessLogic.sharedInstance
+    var indexInBusinessLogicChecklist: Int?
+
+    var checklist: Checklist? {
+        get {
+            guard let index = indexInBusinessLogicChecklist else {
+                return nil
+            }
+
+            return businessLogic.checklists[index]
+        }
+
+        set(checklist) {
+            guard let checklist = checklist, let index = businessLogic.checklists.index(of: checklist) else {
+                indexInBusinessLogicChecklist = nil
+                return
+            }
+
+            indexInBusinessLogicChecklist = index
+        }
+    }
 
     @IBOutlet var detailDescriptionLabel: UILabel?
 
     func configureView() {
-        if let checklist = self.checklist {
-            self.detailDescriptionLabel?.text = checklist.title
-        } else {
-            self.detailDescriptionLabel?.text = "No Content"
+        guard let checklist = checklist else {
+            detailDescriptionLabel?.text = "No Content"
+            return
         }
+
+        detailDescriptionLabel?.text = checklist.title
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureView()
+        configureView()
 
-        if let splitViewController = self.splitViewController {
-            self.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
-            self.navigationItem.leftItemsSupplementBackButton = true
+        if let splitViewController = splitViewController {
+            navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
+            navigationItem.leftItemsSupplementBackButton = true
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureView()
     }
 
 }

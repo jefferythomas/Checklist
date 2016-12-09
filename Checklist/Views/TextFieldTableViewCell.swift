@@ -16,9 +16,11 @@ class TextFieldTableViewCell: UITableViewCell {
 
 class EditableTextFieldTableViewCell: TextFieldTableViewCell {
 
-    override func willTransition(to state: UITableViewCellStateMask) {
-        super.willTransition(to: state)
-        textTextField?.setAppearanceForEditing(state.contains(.showingEditControlMask))
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+
+        let showEditing = editing && !showingDeleteConfirmation
+        textTextField?.setAppearanceForEditing(showEditing)
     }
 
 }

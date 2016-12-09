@@ -31,6 +31,11 @@ extension Checklist: JSONEncodable {
     }
 }
 
+extension Checklist: Equatable {}
+func ==(lhs: Checklist, rhs: Checklist) -> Bool {
+    return lhs.id == rhs.id
+}
+
 extension Checklist: ChecklistFetchable {
     var idsToFetch: [String] { return [id] }
     var titlesToFetch: [String] { return [] }

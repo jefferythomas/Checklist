@@ -76,6 +76,7 @@ class MasterViewController: UITableViewController {
             guard let indexPath = self.tableView.indexPathForSelectedRow else { break }
             guard let detailViewController = segue.detailViewControllerFromDestination() else { break }
 
+            detailViewController.businessLogic = businessLogic
             detailViewController.checklist = businessLogic.checklists[indexPath.row]
 
         default:
