@@ -22,18 +22,8 @@ extension ChecklistBusinessLogic {
         } .then { checklist in
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
         } .then { dataSet in
-            self.checklists = checklistsRaceConditionSafe._inserted(dataSet.items[0], at: index)
+            self.checklists = checklistsRaceConditionSafe.inserted(dataSet.items[0], at: index)
         }
-    }
-
-}
-
-extension Array {
-
-    fileprivate func _inserted(_ element: Element, at index: Int) -> Array {
-        var result = self
-        result.insert(element, at: index)
-        return result
     }
 
 }

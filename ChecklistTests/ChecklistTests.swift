@@ -394,6 +394,35 @@ class ChecklistTests: XCTestCase {
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
     }
 
+    func testInsertNewChecklistItem() {
+        let ex = expectation(description: "testInsertNewChecklistItem")
+        let logic = businessLogic
+
+        firstly {
+            logic.dataSource.create()
+        } .then { dataSet in
+            Checklist(id: dataSet.items[0].id,
+                      title: "checklist",
+                      items: [])
+        } .then { checklist in
+            logic.dataSource.update(dataSet: DataSet(items: [checklist]))
+        } .then { dataSet in
+            logic.checklists = dataSet.items
+        } .then { dataSet in
+            logic.insertNewChecklistItem(title: "test", at: 0, intoChecklistAt: 0)
+        } .then {
+            XCTAssertEqual(logic.checklists[0].items.count, 1)
+        } .then {
+            logic.dataSource.delete(ids: [logic.checklists[0].id])
+        } .always {
+            ex.fulfill()
+        } .catch { error in
+            XCTFail("error: \(error)")
+        }
+        
+        waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
+    }
+
 }
 
 extension ChecklistDataSource {

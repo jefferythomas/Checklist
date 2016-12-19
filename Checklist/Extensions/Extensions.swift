@@ -10,6 +10,12 @@ import Foundation
 
 extension Array {
 
+    func inserted(_ element: Element, at index: Int) -> Array {
+        var result = self
+        result.insert(element, at: index)
+        return result
+    }
+
     func replaced(at index: Int, with element: Element) -> Array {
         var result = self
         result[index] = element

@@ -18,7 +18,7 @@ class MasterViewController: UITableViewController {
     }
 
     @IBAction func dissmissKeyboard(_ sender: Any?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
 
     func insertNewChecklist(title: String, at indexPath: IndexPath) {
@@ -40,8 +40,8 @@ class MasterViewController: UITableViewController {
     func renameChecklist(title: String, at indexPath: IndexPath) {
         businessLogic.renameChecklist(title: title, at: indexPath.row) .then {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            } .catch { error in
-                print("Unable to rename checklist at \(indexPath.row): \(error)")
+        } .catch { error in
+            print("Unable to rename checklist at \(indexPath.row): \(error)")
         }
     }
 
@@ -53,10 +53,10 @@ class MasterViewController: UITableViewController {
         let addAction = #selector(insertNewChecklist(_:))
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: addAction)
 
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
-        self.navigationItem.rightBarButtonItem = addButton
+        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.rightBarButtonItem = addButton
 
-        self.businessLogic.loadAllChecklists().then {
+        businessLogic.loadAllChecklists().then {
             self.tableView.reloadData()
         } .catch { error in
             print("Unable to load all checklists: \(error)")
@@ -64,8 +64,10 @@ class MasterViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController?.isCollapsed ?? true
+        clearsSelectionOnViewWillAppear = splitViewController?.isCollapsed ?? true
         super.viewWillAppear(animated)
+
+        tableView.reloadData()
     }
 
     // MARK: Segues
@@ -73,7 +75,7 @@ class MasterViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier ?? "" {
         case "showDetail":
-            guard let indexPath = self.tableView.indexPathForSelectedRow else { break }
+            guard let indexPath = tableView.indexPathForSelectedRow else { break }
             guard let detailViewController = segue.detailViewControllerFromDestination() else { break }
 
             detailViewController.businessLogic = businessLogic
@@ -131,7 +133,7 @@ extension MasterViewController: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.dissmissKeyboard(textField)
+        dissmissKeyboard(textField)
         return true
     }
 
@@ -140,11 +142,11 @@ extension MasterViewController: UITextFieldDelegate {
 extension UIStoryboardSegue {
 
     func detailViewControllerFromDestination() -> DetailViewController? {
-        if let detailViewController = self.destination as? DetailViewController {
+        if let detailViewController = destination as? DetailViewController {
             return detailViewController
         }
 
-        if let navigationController = self.destination as? UINavigationController,
+        if let navigationController = destination as? UINavigationController,
             let detailViewController = navigationController.topViewController as? DetailViewController {
             return detailViewController
         }
