@@ -14,6 +14,7 @@ typealias ChecklistDataSet = DataSet<Checklist>
 typealias ChecklistDataSetPromise = Promise<ChecklistDataSet>
 
 class ChecklistDataSource {
+
     // MARK: Data source API
 
     func create() -> ChecklistDataSetPromise {
@@ -143,9 +144,11 @@ class ChecklistDataSource {
             return { _ in true }
         }
     }
+
 }
 
 extension ChecklistDataSource {
+
     // The default implementation of ChecklistFetchable
     struct Criteria: ChecklistFetchable {
         let idsToFetch: [String]
@@ -156,13 +159,16 @@ extension ChecklistDataSource {
             titlesToFetch = titles
         }
     }
+
 }
 
 fileprivate extension Checklist {
+
     // Deserialze a checklist from a file URL.
     static func _from(fileUrl: URL) throws -> Checklist {
         let data = try Data(contentsOf: fileUrl)
         let json = try JSONSerialization.jsonObject(with: data)
         return try Checklist.decode(json)
     }
+
 }

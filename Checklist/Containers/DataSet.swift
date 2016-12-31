@@ -7,15 +7,30 @@
 //
 
 class DataSet<Element> {
-    var items: [Element]
-    private let _initialItems: [Element]
+
+    private(set) var items: [Element]
 
     init(items: [Element]) {
         self.items = items
         self._initialItems = items
     }
 
-    func reset() {
-        self.items = self._initialItems;
+    func sort(by: ((Element, Element) -> Bool)?) {
+        _sortBy = by
     }
+
+    func filter(with: ((Element) -> Bool)?) {
+        _filterWith = with
+    }
+
+    private let _initialItems: [Element]
+    private var _sortBy: ((Element, Element) -> Bool)? { didSet { _updateItems() } }
+    private var _filterWith: ((Element) -> Bool)? { didSet { _updateItems() } }
+
+    private func _updateItems() {
+        items = _initialItems
+        if let sortBy = _sortBy { items = items.sorted(by: sortBy) }
+        if let filterWith = _filterWith { items = items.filter(filterWith) }
+    }
+
 }

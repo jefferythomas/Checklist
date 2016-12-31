@@ -11,7 +11,7 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func renameChecklist(title: String, at index: Int) -> Promise<Void> {
+    func renameChecklist(title: String, at index: Int) -> Promise<[Checklist]> {
         let checklistsRaceConditionSafe = checklists
         assert(0 ..< checklistsRaceConditionSafe.count ~= index)
 
@@ -21,6 +21,8 @@ extension ChecklistBusinessLogic {
             self.dataSource.update(dataSet: ChecklistDataSet(items: [renamedChecklist]))
         } .then { dataSet in
             self.checklists = checklistsRaceConditionSafe.replaced(at: index, with: dataSet.items[0])
+        } .then {
+            self.checklists
         }
     }
     

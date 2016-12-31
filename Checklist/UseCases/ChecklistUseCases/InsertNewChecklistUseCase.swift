@@ -11,7 +11,7 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func insertNewChecklist(title: String, at index: Int) -> Promise<Void> {
+    func insertNewChecklist(title: String, at index: Int) -> Promise<[Checklist]> {
         let checklistsRaceConditionSafe = self.checklists
         assert(0 ... checklistsRaceConditionSafe.count ~= index)
 
@@ -23,6 +23,8 @@ extension ChecklistBusinessLogic {
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
         } .then { dataSet in
             self.checklists = checklistsRaceConditionSafe.inserted(dataSet.items[0], at: index)
+        } .then {
+            self.checklists
         }
     }
 

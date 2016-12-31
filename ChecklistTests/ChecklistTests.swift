@@ -115,7 +115,7 @@ class ChecklistTests: XCTestCase {
         let dataSet = DataSet(items: ["a", "b", "c"])
         XCTAssertEqual(dataSet.items, ["a", "b", "c"])
 
-        dataSet.items.sort(by: >)
+        dataSet.sort(by: >)
         XCTAssertEqual(dataSet.items, ["c", "b", "a"])
     }
 
@@ -123,10 +123,10 @@ class ChecklistTests: XCTestCase {
         let dataSet = DataSet(items: ["a", "b", "c"])
         XCTAssertEqual(dataSet.items, ["a", "b", "c"])
 
-        dataSet.items.sort(by: >)
+        dataSet.sort(by: >)
         XCTAssertEqual(dataSet.items, ["c", "b", "a"])
 
-        dataSet.reset()
+        dataSet.sort(by: nil)
         XCTAssertEqual(dataSet.items, ["a", "b", "c"])
     }
 
@@ -284,8 +284,9 @@ class ChecklistTests: XCTestCase {
             logic.dataSource.create(id: id)
         } .then { _ in
             logic.loadAllChecklists()
-        } .then {
-            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].id == id )
+        } .then { checklists -> () in
+            XCTAssertEqual(checklists.count, 1)
+            XCTAssertEqual(checklists[0].id, id)
         } .then {
            logic.dataSource.delete(ids: [id])
         } .always {
@@ -303,8 +304,9 @@ class ChecklistTests: XCTestCase {
 
         firstly {
             logic.insertNewChecklist(title: "test", at: 0)
-        } .then {
-            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "test")
+        } .then { checklists -> () in
+            XCTAssertEqual(checklists.count, 1)
+            XCTAssertEqual(checklists[0].title, "test")
         } .then {
             logic.dataSource.delete(ids: [logic.checklists[0].id])
         } .always {
@@ -325,12 +327,13 @@ class ChecklistTests: XCTestCase {
             logic.dataSource.create(id: id)
         } .then { _ in
             logic.loadAllChecklists()
-        } .then {
-            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].id == id)
+        } .then { checklists -> () in
+            XCTAssertEqual(checklists.count, 1)
+            XCTAssertEqual(checklists[0].id, id)
         } .then {
             logic.deleteChecklist(at: 0)
-        } .then {
-            XCTAssert(logic.checklists.count == 0 && !logic.dataSource._hasChecklist(with: id))
+        } .then { _ -> () in
+            XCTAssertFalse(logic.dataSource._hasChecklist(with: id))
         } .always {
             ex.fulfill()
         } .catch { error in
@@ -346,12 +349,14 @@ class ChecklistTests: XCTestCase {
 
         firstly {
             logic.insertNewChecklist(title: "test", at: 0)
-        } .then {
-            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "test")
+        } .then { checklists -> () in
+            XCTAssertEqual(checklists.count, 1)
+            XCTAssertEqual(checklists[0].title, "test")
         } .then {
             logic.renameChecklist(title: "renamed", at: 0)
-        } .then {
-            XCTAssert(logic.checklists.count == 1 && logic.checklists[0].title == "renamed")
+        } .then { checklists -> () in
+            XCTAssertEqual(checklists.count, 1)
+            XCTAssertEqual(checklists[0].title, "renamed")
         } .then {
             logic.dataSource.delete(ids: [logic.checklists[0].id])
         } .always {

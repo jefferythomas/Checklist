@@ -11,11 +11,13 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func loadAllChecklists() -> Promise<Void> {
+    func loadAllChecklists() -> Promise<[Checklist]> {
         return firstly {
             self.dataSource.fetch(ChecklistDataSource.Criteria()) // fetching empty critera returns all checklists
         } .then { dataSet in
             self.checklists = dataSet.items
+        } .then {
+            self.checklists
         }
     }
     

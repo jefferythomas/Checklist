@@ -11,7 +11,7 @@ import PromiseKit
 
 extension ChecklistBusinessLogic {
 
-    func deleteChecklist(at index: Int) -> Promise<Void> {
+    func deleteChecklist(at index: Int) -> Promise<[Checklist]> {
         let checklistsRaceConditionSafe = self.checklists
         assert(0 ..< checklistsRaceConditionSafe.count ~= index)
 
@@ -21,6 +21,8 @@ extension ChecklistBusinessLogic {
             self.dataSource.delete(dataSet: ChecklistDataSet(items: [deletedChecklist]))
         } .then { dataSet in
             self.checklists = checklistsRaceConditionSafe._removed(at: index)
+        } .then {
+            self.checklists
         }
     }
     

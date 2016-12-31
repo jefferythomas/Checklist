@@ -11,6 +11,7 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     lazy var businessLogic = ChecklistBusinessLogic.sharedInstance
+    lazy var checklists = [Checklist]()
     lazy var defaultTitle = "Checklist"
 
     @IBAction func insertNewChecklist(_ sender: Any?) {
@@ -21,8 +22,20 @@ class MasterViewController: UITableViewController {
         view.endEditing(true)
     }
 
+    func loadAllChecklists() {
+        businessLogic.loadAllChecklists().then { checklists in
+            self.checklists = checklists
+        } .then {
+            self.tableView.reloadData()
+        } .catch { error in
+            print("Unable to load all checklists: \(error)")
+        }
+    }
+
     func insertNewChecklist(title: String, at indexPath: IndexPath) {
-        businessLogic.insertNewChecklist(title: title, at: indexPath.row).then {
+        businessLogic.insertNewChecklist(title: title, at: indexPath.row).then { checklists in
+            self.checklists = checklists
+        } .then {
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to insert new checklist to checklists: \(error)")
@@ -30,7 +43,9 @@ class MasterViewController: UITableViewController {
     }
 
     func deleteChecklist(at indexPath: IndexPath) {
-        businessLogic.deleteChecklist(at: indexPath.row).then {
+        businessLogic.deleteChecklist(at: indexPath.row).then { checklists in
+            self.checklists = checklists
+        } .then {
             self.tableView.deleteRows(at: [indexPath], with: .fade)
         } .catch { error in
             print("Unable to delete checklist from checklists: \(error)")
@@ -38,7 +53,9 @@ class MasterViewController: UITableViewController {
     }
 
     func renameChecklist(title: String, at indexPath: IndexPath) {
-        businessLogic.renameChecklist(title: title, at: indexPath.row) .then {
+        businessLogic.renameChecklist(title: title, at: indexPath.row).then { checklists in
+            self.checklists = checklists
+        } .then {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to rename checklist at \(indexPath.row): \(error)")
@@ -56,11 +73,7 @@ class MasterViewController: UITableViewController {
         navigationItem.leftBarButtonItem = editButtonItem
         navigationItem.rightBarButtonItem = addButton
 
-        businessLogic.loadAllChecklists().then {
-            self.tableView.reloadData()
-        } .catch { error in
-            print("Unable to load all checklists: \(error)")
-        }
+        loadAllChecklists()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +92,7 @@ class MasterViewController: UITableViewController {
             guard let detailViewController = segue.detailViewControllerFromDestination() else { break }
 
             detailViewController.businessLogic = businessLogic
-            detailViewController.checklist = businessLogic.checklists[indexPath.row]
+            detailViewController.checklist = checklists[indexPath.row]
 
         default:
             break
@@ -91,14 +104,14 @@ class MasterViewController: UITableViewController {
 extension MasterViewController /* UITableViewDataSource, UITableViewDelegate */ {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return businessLogic.checklists.count
+        return checklists.count
     }
 
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TextFieldTableViewCell
-        let title = businessLogic.checklists[indexPath.row].title
+        let title = checklists[indexPath.row].title
 
         cell.textTextField?.text = title
 
@@ -127,7 +140,7 @@ extension MasterViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let title = textField.text else { return }
         guard let indexPath = textField.indexPathOfSuperTableViewCell else { return }
-        guard title != businessLogic.checklists[indexPath.row].title else { return }
+        guard title != checklists[indexPath.row].title else { return }
 
         renameChecklist(title: title, at: indexPath)
     }

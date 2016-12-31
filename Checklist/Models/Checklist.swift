@@ -10,12 +10,15 @@ import Foundation
 import Decodable
 
 struct Checklist {
+
     let id: String
     let title: String
     let items: [ChecklistItem]
+
 }
 
 extension Checklist: Decodable {
+
     static func decode(_ json: Any) throws -> Checklist {
         return try self.init(
             id: json => "id",
@@ -23,20 +26,28 @@ extension Checklist: Decodable {
             items: json => "items"
         )
     }
+
 }
 
 extension Checklist: JSONEncodable {
+
     func JSONEncode() throws -> Any {
         return ["id": id, "title": title, "items": try items.JSONEncode()]
     }
+
 }
 
-extension Checklist: Equatable {}
-func ==(lhs: Checklist, rhs: Checklist) -> Bool {
-    return lhs.id == rhs.id
+extension Checklist: Equatable {
+
+    static func ==(lhs: Checklist, rhs: Checklist) -> Bool {
+        return lhs.id == rhs.id
+    }
+
 }
 
 extension Checklist: ChecklistFetchable {
+
     var idsToFetch: [String] { return [id] }
     var titlesToFetch: [String] { return [] }
+
 }

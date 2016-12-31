@@ -9,6 +9,8 @@
 import Foundation
 
 protocol ChecklistFetchable {
+
     var idsToFetch: [String] { get }
     var titlesToFetch: [String] { get }
+
 }
