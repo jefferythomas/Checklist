@@ -139,19 +139,19 @@ class ChecklistTests: XCTestCase {
     func testChecklistDataSourceCreateAndDelete() {
         let ex = expectation(description: "testChecklistDataSourceCreateAndDelete")
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             self.dataSource.create()
         } .then { dataSet -> ChecklistDataSet in
             XCTAssertTrue(self.dataSource._hasChecklist(with: dataSet.items[0].id))
             return dataSet
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSetPromise in
             self.dataSource.delete(dataSet: dataSet)
-        } .then { dataSet in
+        } .then { dataSet -> () in
             XCTAssertFalse(self.dataSource._hasChecklist(with: dataSet.items[0].id))
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -161,18 +161,18 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testChecklistDataSourceCreateAndDeleteId")
         let id = NSUUID().uuidString
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             self.dataSource.create(id: id)
-        } .then { _ in
+        } .then { _ -> () in
             XCTAssertTrue(self.dataSource._hasChecklist(with: id))
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             self.dataSource.delete(ids: [id])
-        } .then { _ in
+        } .then { _ -> () in
             XCTAssertFalse(self.dataSource._hasChecklist(with: id))
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -181,25 +181,25 @@ class ChecklistTests: XCTestCase {
     func testChecklistDataSourceFetchChecklistByTitle() {
         let ex = expectation(description: "testChecklistDataSourceFetchChecklistByTitle")
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             self.dataSource.create()
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSet in
             ChecklistDataSet(items: [Checklist(id: dataSet.items[0].id,
                                                title: "test",
                                                items: dataSet.items[0].items)])
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSetPromise in
             self.dataSource.update(dataSet: dataSet)
-        } .then { _ in
+        } .then { _ -> ChecklistDataSetPromise in
             self.dataSource.fetch(ChecklistDataSource.Criteria(titles: ["test"]))
         } .then { dataSet -> ChecklistDataSet in
             XCTAssertEqual(dataSet.items.first?.title, "test")
             return dataSet
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSetPromise in
             self.dataSource.delete(dataSet: dataSet)
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -211,22 +211,22 @@ class ChecklistTests: XCTestCase {
 
         firstly {
             self.dataSource.create(id: id)
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSet in
             ChecklistDataSet(items: [Checklist(id: dataSet.items[0].id,
                                                title: "test",
                                                items: dataSet.items[0].items)])
-        } .then { dataSet in
+        } .then { dataSet -> ChecklistDataSetPromise in
             self.dataSource.update(dataSet: dataSet)
-        } .then { _ in
+        } .then { _ -> ChecklistDataSetPromise in
             self.dataSource.fetch(ChecklistDataSource.Criteria(ids: [id], titles: ["test"]))
-        } .then { dataSet in
+        } .then { dataSet -> Void in
             XCTAssertEqual(dataSet.items.first?.title, "test")
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             self.dataSource.delete(ids: [id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -245,10 +245,10 @@ class ChecklistTests: XCTestCase {
             XCTAssertEqual(dataSet.items.first?.id, id)
         } .then {
             self.dataSource.delete(ids: [id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -258,18 +258,18 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testChecklistDataSourceFetchChecklists")
         let id = NSUUID().uuidString
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             self.dataSource.create(id: id)
-        } .then { _ in
+        } .then { _ -> ChecklistDataSetPromise in
             self.dataSource.fetch(ChecklistDataSource.Criteria())
-        } .then { dataSet in
+        } .then { dataSet -> Void in
             XCTAssertTrue(dataSet.items.contains { checklist in checklist.id == id })
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             self.dataSource.delete(ids: [id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -280,19 +280,19 @@ class ChecklistTests: XCTestCase {
         let id = NSUUID().uuidString
         let logic = self.businessLogic
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             logic.dataSource.create(id: id)
-        } .then { _ in
+        } .then { _ -> Promise<[Checklist]> in
             logic.loadAllChecklists()
         } .then { checklists -> () in
             XCTAssertEqual(checklists.count, 1)
             XCTAssertEqual(checklists[0].id, id)
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
            logic.dataSource.delete(ids: [id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -302,17 +302,17 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testInsertNewChecklist")
         let logic = self.businessLogic
 
-        firstly {
+        firstly { () -> Promise<[Checklist]> in
             logic.insertNewChecklist(title: "test", at: 0)
         } .then { checklists -> () in
             XCTAssertEqual(checklists.count, 1)
             XCTAssertEqual(checklists[0].title, "test")
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             logic.dataSource.delete(ids: [logic.checklists[0].id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -323,21 +323,21 @@ class ChecklistTests: XCTestCase {
         let id = NSUUID().uuidString
         let logic = self.businessLogic
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             logic.dataSource.create(id: id)
-        } .then { _ in
+        } .then { _ -> Promise<[Checklist]> in
             logic.loadAllChecklists()
         } .then { checklists -> () in
             XCTAssertEqual(checklists.count, 1)
             XCTAssertEqual(checklists[0].id, id)
-        } .then {
+        } .then { () -> Promise<[Checklist]> in
             logic.deleteChecklist(at: 0)
         } .then { _ -> () in
             XCTAssertFalse(logic.dataSource._hasChecklist(with: id))
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -347,22 +347,22 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testRenameChecklist")
         let logic = businessLogic
 
-        firstly {
+        firstly { () -> Promise<[Checklist]> in
             logic.insertNewChecklist(title: "test", at: 0)
         } .then { checklists -> () in
             XCTAssertEqual(checklists.count, 1)
             XCTAssertEqual(checklists[0].title, "test")
-        } .then {
+        } .then { () -> Promise<[Checklist]> in
             logic.renameChecklist(title: "renamed", at: 0)
         } .then { checklists -> () in
             XCTAssertEqual(checklists.count, 1)
             XCTAssertEqual(checklists[0].title, "renamed")
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             logic.dataSource.delete(ids: [logic.checklists[0].id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -372,28 +372,28 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testTearChecklist")
         let logic = businessLogic
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             logic.dataSource.create()
-        } .then { dataSet in
+        } .then { dataSet -> Checklist in
             Checklist(id: dataSet.items[0].id,
                       title: "checklist",
                       items: [ChecklistItem(title: "item", checked: true)])
-        } .then { checklist in
+        } .then { checklist -> ChecklistDataSetPromise in
             logic.dataSource.update(dataSet: DataSet(items: [checklist]))
-        } .then { dataSet in
+        } .then { dataSet -> Void in
             logic.checklists = dataSet.items
-        } .then { dataSet in
+        } .then { () -> Void in
             XCTAssertTrue(logic.checklists[0].items[0].checked)
-        } .then {
+        } .then { () -> Promise<Void> in
             logic.tearChecklist(at: 0)
-        } .then {
+        } .then { () -> Void in
             XCTAssertFalse(logic.checklists[0].items[0].checked)
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             logic.dataSource.delete(ids: [logic.checklists[0].id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
@@ -403,26 +403,26 @@ class ChecklistTests: XCTestCase {
         let ex = expectation(description: "testInsertNewChecklistItem")
         let logic = businessLogic
 
-        firstly {
+        firstly { () -> ChecklistDataSetPromise in
             logic.dataSource.create()
-        } .then { dataSet in
+        } .then { dataSet -> Checklist in
             Checklist(id: dataSet.items[0].id,
                       title: "checklist",
                       items: [])
-        } .then { checklist in
+        } .then { checklist -> ChecklistDataSetPromise in
             logic.dataSource.update(dataSet: DataSet(items: [checklist]))
-        } .then { dataSet in
+        } .then { dataSet -> Void in
             logic.checklists = dataSet.items
-        } .then { dataSet in
+        } .then { dataSet -> Promise<Void> in
             logic.insertNewChecklistItem(title: "test", at: 0, intoChecklistAt: 0)
-        } .then {
+        } .then { () -> Void in
             XCTAssertEqual(logic.checklists[0].items.count, 1)
-        } .then {
+        } .then { () -> ChecklistDataSetPromise in
             logic.dataSource.delete(ids: [logic.checklists[0].id])
-        } .always {
-            ex.fulfill()
         } .catch { error in
             XCTFail("error: \(error)")
+        } .always {
+            ex.fulfill()
         }
         
         waitForExpectations(timeout: 1.0) { error in XCTAssertNil(error) }
