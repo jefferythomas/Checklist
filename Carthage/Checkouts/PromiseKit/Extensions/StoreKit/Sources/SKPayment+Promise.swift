@@ -1,7 +1,7 @@
-import StoreKit
-#if !COCOAPODS
+#if !PMKCocoaPods
 import PromiseKit
 #endif
+import StoreKit
 
 extension SKPayment {
     public func promise() -> Promise<SKPaymentTransaction> {
@@ -9,8 +9,8 @@ extension SKPayment {
     }
 }
 
-fileprivate class PaymentObserver: NSObject, SKPaymentTransactionObserver {
-    let (promise, fulfill, reject) = Promise<SKPaymentTransaction>.pending()
+private class PaymentObserver: NSObject, SKPaymentTransactionObserver {
+    let (promise, seal) = Promise<SKPaymentTransaction>.pending()
     let payment: SKPayment
     var retainCycle: PaymentObserver?
     
@@ -27,15 +27,15 @@ fileprivate class PaymentObserver: NSObject, SKPaymentTransactionObserver {
             return
         }
         switch transaction.transactionState {
-        case .purchased:
+        case .purchased, .restored:
             queue.finishTransaction(transaction)
-            fulfill(transaction)
+            seal.fulfill(transaction)
             queue.remove(self)
             retainCycle = nil
         case .failed:
-            let error = transaction.error ?? NSError.cancelledError()
+            let error = transaction.error ?? PMKError.cancelled
             queue.finishTransaction(transaction)
-            reject(error)
+            seal.reject(error)
             queue.remove(self)
             retainCycle = nil
         default:

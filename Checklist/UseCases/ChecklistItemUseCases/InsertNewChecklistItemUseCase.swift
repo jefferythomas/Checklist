@@ -22,7 +22,7 @@ extension ChecklistBusinessLogic {
 
         return firstly {
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
-        } .then { dataSet in
+        } .done { dataSet in
             self.checklists = checklistsRaceConditionSafe.replaced(at: index, with: dataSet.items[0])
         }
     }

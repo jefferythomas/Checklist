@@ -17,13 +17,13 @@ extension ChecklistBusinessLogic {
 
         return firstly {
             self.dataSource.create()
-        } .then { dataSet in
+        } .map { dataSet in
             dataSet.items[0].renamed(to: title) // After the new checklist is created, set the name
         } .then { checklist in
             self.dataSource.update(dataSet: ChecklistDataSet(items: [checklist]))
-        } .then { dataSet in
+        } .done { dataSet in
             self.checklists = checklistsRaceConditionSafe.inserted(dataSet.items[0], at: index)
-        } .then {
+        } .map {
             self.checklists
         }
     }

@@ -37,7 +37,7 @@ class DetailViewController: UITableViewController {
     func tearChecklist() {
         guard let index = indexInBusinessLogicChecklist else { return }
 
-        businessLogic.tearChecklist(at: index).then {
+        businessLogic.tearChecklist(at: index).done {
             self.tableView._reloadVisibleRows(with: .none)
         } .catch { error in
             print("Unable to tear checklist: \(error)")
@@ -47,7 +47,7 @@ class DetailViewController: UITableViewController {
     func insertNewChecklistItem(title: String, at indexPath: IndexPath) {
         guard let index = indexInBusinessLogicChecklist else { return }
 
-        businessLogic.insertNewChecklistItem(title: defaultTitle, at: indexPath.row, intoChecklistAt: index).then {
+        businessLogic.insertNewChecklistItem(title: defaultTitle, at: indexPath.row, intoChecklistAt: index).done {
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to insert new checklist item: \(error)")

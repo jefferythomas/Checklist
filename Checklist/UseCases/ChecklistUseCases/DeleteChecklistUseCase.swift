@@ -19,9 +19,9 @@ extension ChecklistBusinessLogic {
 
         return firstly {
             self.dataSource.delete(dataSet: ChecklistDataSet(items: [deletedChecklist]))
-        } .then { dataSet in
+        } .done { dataSet in
             self.checklists = checklistsRaceConditionSafe._removed(at: index)
-        } .then {
+        } .map {
             self.checklists
         }
     }

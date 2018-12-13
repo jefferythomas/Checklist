@@ -23,9 +23,8 @@ class MasterViewController: UITableViewController {
     }
 
     func loadAllChecklists() {
-        businessLogic.loadAllChecklists().then { checklists in
+        businessLogic.loadAllChecklists().done { checklists in
             self.checklists = checklists
-        } .then {
             self.tableView.reloadData()
         } .catch { error in
             print("Unable to load all checklists: \(error)")
@@ -33,9 +32,8 @@ class MasterViewController: UITableViewController {
     }
 
     func insertNewChecklist(title: String, at indexPath: IndexPath) {
-        businessLogic.insertNewChecklist(title: title, at: indexPath.row).then { checklists in
+        businessLogic.insertNewChecklist(title: title, at: indexPath.row).done { checklists in
             self.checklists = checklists
-        } .then {
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to insert new checklist to checklists: \(error)")
@@ -43,9 +41,8 @@ class MasterViewController: UITableViewController {
     }
 
     func deleteChecklist(at indexPath: IndexPath) {
-        businessLogic.deleteChecklist(at: indexPath.row).then { checklists in
+        businessLogic.deleteChecklist(at: indexPath.row).done { checklists in
             self.checklists = checklists
-        } .then {
             self.tableView.deleteRows(at: [indexPath], with: .fade)
         } .catch { error in
             print("Unable to delete checklist from checklists: \(error)")
@@ -53,9 +50,8 @@ class MasterViewController: UITableViewController {
     }
 
     func renameChecklist(title: String, at indexPath: IndexPath) {
-        businessLogic.renameChecklist(title: title, at: indexPath.row).then { checklists in
+        businessLogic.renameChecklist(title: title, at: indexPath.row).done { checklists in
             self.checklists = checklists
-        } .then {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
         } .catch { error in
             print("Unable to rename checklist at \(indexPath.row): \(error)")

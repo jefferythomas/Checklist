@@ -18,9 +18,6 @@
 		7B75C5971CE960EE0047AACF /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B75C5961CE960EE0047AACF /* ChecklistItem.swift */; };
 		7B9DFC001CFD2984009689C8 /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9DFBFF1CFD2984009689C8 /* ChecklistDataSource.swift */; };
 		7BAA027D1DD4E99A0019E2AC /* ChecklistBusinessLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAA027C1DD4E99A0019E2AC /* ChecklistBusinessLogic.swift */; };
-		7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
-		7BAA6A5E1CFBD20800DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
-		7BAA6A5F1CFBD20F00DF8598 /* Decodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BAA6A571CFB7D9500DF8598 /* Decodable.framework */; };
 		7BB76A8E1CE7B43500D05C9C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8D1CE7B43500D05C9C /* AppDelegate.swift */; };
 		7BB76A901CE7B43500D05C9C /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A8F1CE7B43500D05C9C /* MasterViewController.swift */; };
 		7BB76A921CE7B43500D05C9C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB76A911CE7B43500D05C9C /* DetailViewController.swift */; };
@@ -102,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BAA6A581CFB7D9500DF8598 /* Decodable.framework in Frameworks */,
 				7B72C5BC1CFE78FD006E9923 /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,7 +107,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BAA6A5E1CFBD20800DF8598 /* Decodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +114,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BAA6A5F1CFBD20F00DF8598 /* Decodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,7 +312,6 @@
 				7BB76AA71CE7B43500D05C9C /* Sources */,
 				7BB76AA81CE7B43500D05C9C /* Frameworks */,
 				7BB76AA91CE7B43500D05C9C /* Resources */,
-				7BAA6A601CFBD3FB00DF8598 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -337,7 +330,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "JLT Source";
 				TargetAttributes = {
 					7BB76A891CE7B43500D05C9C = {
@@ -410,28 +403,14 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Decodable.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 			);
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		7BAA6A601CFBD3FB00DF8598 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Decodable.framework",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -530,12 +509,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -583,12 +564,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

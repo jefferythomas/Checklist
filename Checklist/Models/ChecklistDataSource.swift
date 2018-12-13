@@ -8,7 +8,6 @@
 
 import Foundation
 import PromiseKit
-import Decodable
 
 typealias ChecklistDataSet = DataSet<Checklist>
 typealias ChecklistDataSetPromise = Promise<ChecklistDataSet>
@@ -22,7 +21,7 @@ class ChecklistDataSource {
     }
 
     func create(id: String) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise {
+        return DispatchQueue.main.async(.promise) {
             DataSet(items: [Checklist(id: id, title: "", items: [])])
         }.then { dataSet in
             self.update(dataSet: dataSet)
@@ -36,7 +35,7 @@ class ChecklistDataSource {
 
         let isIncluded = _filterClosureForChecklist(fetchable: fetchable)
 
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
+        return DispatchQueue.main.async(.promise) { () -> ChecklistDataSet in
             let enumerator = self.fileManager.enumerator(at: self.baseUrl, includingPropertiesForKeys: [])!
 
             let items = try enumerator.allObjects.map { url in
@@ -48,12 +47,11 @@ class ChecklistDataSource {
     }
 
     func update(dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise {
+        return DispatchQueue.main.async(.promise) {
             for checklist in dataSet.items {
                 let url = self.url(forId: checklist.id)
-                let json = try checklist.JSONEncode()
+                let data = try JSONEncoder().encode(checklist)
 
-                let data = try JSONSerialization.data(withJSONObject: json)
                 try data.write(to: url)
             }
 
@@ -61,8 +59,8 @@ class ChecklistDataSource {
         }
     }
 
-    func delete(dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise {
+    @discardableResult func delete(dataSet: ChecklistDataSet) -> ChecklistDataSetPromise {
+        return DispatchQueue.main.async(.promise) {
             for checklist in dataSet.items {
                 try self.fileManager.removeItem(at: self.url(forId: checklist.id))
             }
@@ -71,7 +69,7 @@ class ChecklistDataSource {
         }
     }
 
-    func delete(ids: [String]) -> ChecklistDataSetPromise {
+    @discardableResult func delete(ids: [String]) -> ChecklistDataSetPromise {
         return firstly {
             self.fetch(Criteria(ids: ids))
         }.then { dataSet in
@@ -123,7 +121,7 @@ class ChecklistDataSource {
     }
 
     private func _specializedFetchUsingOnlyIds(_ ids: [String]) -> ChecklistDataSetPromise {
-        return DispatchQueue.main.promise { () -> ChecklistDataSet in
+        return DispatchQueue.main.async(.promise) { () -> ChecklistDataSet in
             let checklists = try ids.map { id in try Checklist._from(fileUrl: self.url(forId: id)) }
 
             return DataSet(items: checklists)
@@ -167,8 +165,7 @@ fileprivate extension Checklist {
     // Deserialze a checklist from a file URL.
     static func _from(fileUrl: URL) throws -> Checklist {
         let data = try Data(contentsOf: fileUrl)
-        let json = try JSONSerialization.jsonObject(with: data)
-        return try Checklist.decode(json)
+        return try JSONDecoder().decode(Checklist.self, from: data)
     }
 
 }

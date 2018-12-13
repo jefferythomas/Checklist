@@ -7,34 +7,12 @@
 //
 
 import Foundation
-import Decodable
-import protocol Decodable.Decodable
 
-struct Checklist {
+struct Checklist : Codable {
 
     let id: String
     let title: String
     let items: [ChecklistItem]
-
-}
-
-extension Checklist: Decodable {
-
-    static func decode(_ json: Any) throws -> Checklist {
-        return try self.init(
-            id: json => "id",
-            title: json => "title",
-            items: json => "items"
-        )
-    }
-
-}
-
-extension Checklist: JSONEncodable {
-
-    func JSONEncode() throws -> Any {
-        return ["id": id, "title": title, "items": try items.JSONEncode()]
-    }
 
 }
 
