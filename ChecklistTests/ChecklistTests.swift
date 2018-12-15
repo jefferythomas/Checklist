@@ -25,8 +25,7 @@ class ChecklistTests: XCTestCase {
     }
 
     override func tearDown() {
-        // NOTE: This asserts false. I don't know why.
-        // XCTAssertNil(dataSource.fileManager.enumerator(atPath: dataSource.baseUrl.path)?.nextObject())
+        XCTAssert(dataSource.fileManager.enumerator(atPath: dataSource.baseUrl.path)?.allObjects.count ?? 0 <= 1)
         try? dataSource.fileManager.removeItem(at: dataSource.baseUrl)
         XCTAssertFalse(dataSource.fileManager.fileExists(atPath: dataSource.baseUrl.path))
     }
